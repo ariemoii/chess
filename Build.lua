@@ -14,4 +14,4 @@ group "Core"
 	include "Core/Build-Core.lua"
 group ""
 
-include "App/Build-App.lua"
+include "Chess-App/Build-Chess-App.lua"
