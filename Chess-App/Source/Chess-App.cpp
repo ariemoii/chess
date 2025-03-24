@@ -1,7 +1,7 @@
 #include "Core.h"
-#include "Test_SFML.h"
+#include "Window_Handler.h"
 
-int main()
-{
-	display_window();
+int main() {
+  Window_Handler windowHandler = Window_Handler(100, 500);
+
 }
