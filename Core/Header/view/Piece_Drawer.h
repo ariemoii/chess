@@ -3,6 +3,8 @@
 
 class Piece_Drawer {
   private:
+    sf::RenderWindow* window;
+
     sf::Texture black_king;
     sf::Texture black_knight;
     sf::Texture black_bishop;
@@ -20,4 +22,5 @@ class Piece_Drawer {
 
   public:
     Piece_Drawer();
+    void draw_piece(sf::Texture texture, int xCoord, int yCoord);
 };

@@ -12,7 +12,7 @@ project "Chess-App"
       "Source",
 
 	  -- Include Core
-	  "../Core/Header", "../Core/Source"
+	  "../Core/Header/**", "../Core/Source/**",
    }
 
    links

@@ -1,4 +1,5 @@
-#include "../Header/Window_Handler.h"
+#include "../../Header/view/Window_Handler.h"
+#include "../../Header/view/Piece_Drawer.h"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -10,7 +11,6 @@ SCREEN_HEIGHT(screenHeight),
 PIXEL_SQUARE_WIDTH(screenWidth/NUM_SQUARES_SIDE),
 window(sf::VideoMode({SCREEN_HEIGHT, SCREEN_WIDTH}), "Chess Application", sf::Style::Close | sf::Style::Titlebar) {
   display_window();
-  
 }
 
 void Window_Handler::display_window() {
@@ -18,10 +18,7 @@ void Window_Handler::display_window() {
   while(window.isOpen()) {
     //draw frame
     window.clear(sf::Color::Green);
-
-
     draw_board();
-
     window.display();
 
     //frame logic
