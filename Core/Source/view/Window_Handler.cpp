@@ -10,6 +10,8 @@ SCREEN_WIDTH(screenWidth),
 SCREEN_HEIGHT(screenHeight),
 PIXEL_SQUARE_WIDTH(screenWidth/NUM_SQUARES_SIDE),
 window(sf::VideoMode({SCREEN_HEIGHT, SCREEN_WIDTH}), "Chess Application", sf::Style::Close | sf::Style::Titlebar) {
+  draw_board();
+  window.display();
 }
 
 void Window_Handler::draw_square(bool isLightSquare, int xCoord, int yCoord) {

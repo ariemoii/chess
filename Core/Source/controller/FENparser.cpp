@@ -36,7 +36,6 @@ std::vector<Piece> FENparser::parseFEN(std::string fen) {
   std::vector<Piece> pieceVector;
 
   for(auto &i : boardFEN) {
-    std::cout << "parsing " << i << std::endl;
     if(i == '/') {
       //new rank;
       file = 0;
@@ -59,7 +58,12 @@ std::vector<Piece> FENparser::parseFEN(std::string fen) {
 }
 
 std::string FENparser::requestFEN() {
-  std::cout << "Please enter a FEN:\n";
+  std::cout << "enter FEN to load from position, or press 'enter' for standard game:\n";
+  char c = getchar();
+  if(c == '\n') {
+    return std::string("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+  }
+  ungetc(c, stdout);
   std::string fen;
   getline(std::cin, fen);
   return fen;
