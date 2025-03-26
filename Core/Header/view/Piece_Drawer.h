@@ -1,7 +1,11 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include "../model/Pieces/Piece.h"
 
 class Piece_Drawer {
+
+  
+
   private:
     sf::RenderWindow* window;
 
@@ -19,8 +23,14 @@ class Piece_Drawer {
     sf::Texture white_queen;
     sf::Texture white_rook;
 
+    static constexpr int NUM_SQUARES_SIDE = 8;
+    const int PIXEL_SQUARE_WIDTH;
 
   public:
-    Piece_Drawer();
-    void draw_piece(sf::Texture texture, int xCoord, int yCoord);
+    Piece_Drawer(sf::RenderWindow *window, int pixelSquareWidth);
+    void draw_piece(Piece_Type, Team, int xCoord, int yCoord);
+    void draw_FEN(std::vector<Piece> pieceVector);
+
+  private:
+    sf::Texture whatTexture(Piece_Type pieceType, Team team);
 };

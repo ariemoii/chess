@@ -9,8 +9,8 @@ project "Chess-Core"
 
    includedirs
    {
-    "Source",
-    "Header",
+    "Source/**",
+    "Header/**",
    }
 
    targetdir ("../Binaries/" .. OutputDir .. "/%{prj.name}")

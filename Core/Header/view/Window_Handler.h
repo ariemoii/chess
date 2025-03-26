@@ -10,20 +10,20 @@ class Window_Handler {
     static constexpr int NUM_SQUARES_SIDE = 8;
     const int SCREEN_HEIGHT;
     const int PIXEL_SQUARE_WIDTH;
-    sf::RenderWindow window;
+  
+    public:
+      sf::Event event;
+    
 
     /**
      * constructor
      */
   public:
     Window_Handler(int screenHeight, int screenWidth);
+    sf::RenderWindow window;
+    bool nextEvent();
   
   private:
-    /**
-     * display the window
-     */
-    void display_window();
-
     /**
      * draw the board on the window
      */

@@ -5,14 +5,14 @@ project "Chess-App"
    targetdir "Binaries/%{cfg.buildcfg}"
    staticruntime "off"
 
-   files { "Source/**.h", "Source/**.cpp" }
+   files { "Source/**.h", "Source/**.cpp", "Core/**.h", "Core/**.cpp" }
 
    includedirs
    {
       "Source",
 
 	  -- Include Core
-	  "../Core/Header/**", "../Core/Source/**",
+	  "../Core/**"
    }
 
    links

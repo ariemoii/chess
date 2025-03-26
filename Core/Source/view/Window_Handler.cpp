@@ -1,5 +1,5 @@
-#include "../../Header/view/Window_Handler.h"
-#include "../../Header/view/Piece_Drawer.h"
+#include "Window_Handler.h"
+#include "Piece_Drawer.h"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -10,31 +10,6 @@ SCREEN_WIDTH(screenWidth),
 SCREEN_HEIGHT(screenHeight),
 PIXEL_SQUARE_WIDTH(screenWidth/NUM_SQUARES_SIDE),
 window(sf::VideoMode({SCREEN_HEIGHT, SCREEN_WIDTH}), "Chess Application", sf::Style::Close | sf::Style::Titlebar) {
-  display_window();
-}
-
-void Window_Handler::display_window() {
-  sf::Event event;
-  while(window.isOpen()) {
-    //draw frame
-    window.clear(sf::Color::Green);
-    draw_board();
-    window.display();
-
-    //frame logic
-    while(window.waitEvent(event)) {
-
-      //check if window closed
-      switch(event.type) {
-        case sf::Event::Closed:
-          window.close();
-          return;
-      }
-    }
-    
-    //clear frame
-    window.clear(sf::Color::Green);
-  }
 }
 
 void Window_Handler::draw_square(bool isLightSquare, int xCoord, int yCoord) {
@@ -66,3 +41,6 @@ void Window_Handler::draw_board() {
   }
 }
 
+bool Window_Handler::nextEvent() {
+  return window.waitEvent(event);
+}

@@ -1,6 +1,8 @@
-#include "Core.h"
-#include "Window_Handler.h"
+#include "Chess_Game.h"
+#include "FENparser.h"
+#include <iostream>
 
 int main() {
-  Window_Handler windowHandler = Window_Handler(800, 800);
+  Chess_Game chess;
+  chess.run_chess();
 }
