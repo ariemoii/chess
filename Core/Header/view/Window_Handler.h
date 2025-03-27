@@ -1,5 +1,8 @@
+#pragma once
+
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include "Board.h"
 
 /**
  * Class that handles the window
@@ -22,16 +25,20 @@ class Window_Handler {
     Window_Handler(int screenHeight, int screenWidth);
     sf::RenderWindow window;
     bool nextEvent();
-  
+    void draw_board(Board *board);
+    void draw_board_background();
+    
   private:
     /**
-     * draw the board on the window
+     * draw the background on the window
      */
-    void draw_board();
+    
 
     /**
      * draw a square on the board
      */
     void draw_square(bool isLightSquare, int xCoord, int yCoord);
+
+    
 
 };

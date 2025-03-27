@@ -2,10 +2,10 @@
 
 #include "Piece.h"
 
-class Rook : public Piece{
+class Bishop : public Piece{
   private:
     const static std::vector<Point> moveSet;
   public:
-    Rook(Team team, int file, int rank);
+    Bishop(Team team, int file, int rank);
 
 };

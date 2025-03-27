@@ -1,6 +1,8 @@
+#pragma once
+
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
-#include "../model/Pieces/Piece.h"
+#include "Piece.h"
 
 class Piece_Drawer {
 
@@ -28,9 +30,8 @@ class Piece_Drawer {
 
   public:
     Piece_Drawer(sf::RenderWindow *window, int pixelSquareWidth);
-    void draw_piece(Piece_Type, Team, int xCoord, int yCoord);
-    void draw_FEN(std::vector<Piece> pieceVector);
+    void draw_piece(Piece_Type, Team, int file, int rank);
 
   private:
-    sf::Texture whatTexture(Piece_Type pieceType, Team team);
+    sf::Texture& whatTexture(Piece_Type pieceType, Team team);
 };

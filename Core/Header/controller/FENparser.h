@@ -1,4 +1,7 @@
-#include "../model/Pieces/Piece.h"
+#pragma once
+#include "Piece.h"
+#include "Board.h"
+
 #include <string>
 
 
@@ -9,7 +12,7 @@
 class FENparser {
   public:
     FENparser();
-    std::vector<Piece> parseFEN(std::string FEN);
+    void parseFenOnBoard(std::string FEN, Board *board);
     std::string requestFEN();
 
   private:

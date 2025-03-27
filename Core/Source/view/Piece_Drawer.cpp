@@ -4,15 +4,16 @@
 #include <SFML/Window.hpp>
 
 #include <iostream>
+#include <filesystem>
 
-#define PATH_TO_LICHESS_PIECES "../../../../../Assets/Pieces/pieces-basic-png/"
+#define PATH_TO_LICHESS_PIECES "../../../../Assets/Pieces/pieces-basic-png/"
 #define PATH_TO_PIECES(piece) PATH_TO_LICHESS_PIECES#piece
 
 Piece_Drawer::Piece_Drawer(sf::RenderWindow *window, int pixelSquareWidth) : 
 window(window),
 PIXEL_SQUARE_WIDTH(pixelSquareWidth) {
   black_bishop.loadFromFile(PATH_TO_PIECES(black-bishop.png));
-  black_king.loadFromFile(PATH_TO_PIECES(black_king.png));
+  black_king.loadFromFile(PATH_TO_PIECES(black-king.png));
   black_knight.loadFromFile(PATH_TO_PIECES(black-knight.png));
   black_pawn.loadFromFile(PATH_TO_PIECES(black-pawn.png));
   black_queen.loadFromFile(PATH_TO_PIECES(black-queen.png));
@@ -29,28 +30,17 @@ PIXEL_SQUARE_WIDTH(pixelSquareWidth) {
 /**
  * draws the piece on the window
  */
-void Piece_Drawer::draw_piece(Piece_Type pieceType, Team team, int xCoord, int yCoord) {
+void Piece_Drawer::draw_piece(Piece_Type pieceType, Team team, int file, int rank) {
   sf::Sprite sprite(whatTexture(pieceType, team));
   sprite.setScale({0.75f,0.75f});
-  sprite.setPosition({xCoord, yCoord});
+  sprite.setPosition({rank*PIXEL_SQUARE_WIDTH, file*PIXEL_SQUARE_WIDTH});
   window->draw(sprite);
 }
-
-void Piece_Drawer::draw_FEN(std::vector<Piece> pieceVector) {
-  sf::Vector2u windowSize = window->getSize();
-  for(auto &i : pieceVector) {
-    int xCoord, yCoord;
-    xCoord = PIXEL_SQUARE_WIDTH*i.getFile();
-    yCoord =PIXEL_SQUARE_WIDTH*i.getRank();
-    draw_piece(i.getType(), i.getTeam(), xCoord, yCoord);
-  }
-}
-
 
 /**
  * Gets the texture of the requested piece
  */
-sf::Texture Piece_Drawer::whatTexture(Piece_Type pieceType, Team team) {
+sf::Texture& Piece_Drawer::whatTexture(Piece_Type pieceType, Team team) {
   switch(team) {
     case WHITE:
       switch(pieceType) {

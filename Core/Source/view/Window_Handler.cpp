@@ -10,8 +10,8 @@ SCREEN_WIDTH(screenWidth),
 SCREEN_HEIGHT(screenHeight),
 PIXEL_SQUARE_WIDTH(screenWidth/NUM_SQUARES_SIDE),
 window(sf::VideoMode({SCREEN_HEIGHT, SCREEN_WIDTH}), "Chess Application", sf::Style::Close | sf::Style::Titlebar) {
-  draw_board();
-  window.display();
+  draw_board_background();
+  //window.display();
 }
 
 void Window_Handler::draw_square(bool isLightSquare, int xCoord, int yCoord) {
@@ -26,7 +26,7 @@ void Window_Handler::draw_square(bool isLightSquare, int xCoord, int yCoord) {
   window.draw(rectangle);
 }
 
-void Window_Handler::draw_board() {
+void Window_Handler::draw_board_background() {
   for(int i = 0; i < NUM_SQUARES_SIDE; i++) {
     for(int j = 0; j < NUM_SQUARES_SIDE; j++) {
       int xCoord, yCoord;
@@ -45,4 +45,16 @@ void Window_Handler::draw_board() {
 
 bool Window_Handler::nextEvent() {
   return window.waitEvent(event);
+}
+
+void Window_Handler::draw_board(Board *board) {
+  Piece_Drawer pieceDrawer(&window, PIXEL_SQUARE_WIDTH);
+  for(int i = 7; i >= 0; i--) {
+    for(int j = 0; j < 8; j++) {
+      if(board->theBoard[i][j]->getType() == NIKS) {
+        continue;
+      }
+      pieceDrawer.draw_piece(board->theBoard[i][j]->getType(), board->theBoard[i][j]->getTeam(), i, j);
+    }
+  }
 }
