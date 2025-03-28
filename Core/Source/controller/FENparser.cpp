@@ -4,36 +4,34 @@
 
 FENparser::FENparser(){};
 
-Piece_Type FENparser::pieceTypeFromSymbol(char i) {
+NewPiece::Piece_Type FENparser::pieceTypeFromSymbol(char i) {
   switch(i) {
     case 'k':
-      return KING;
+      return NewPiece::KING;
     case 'n':
-      return KNIGHT;
+      return NewPiece::KNIGHT;
     case 'b':
-      return BISHOP;
+      return NewPiece::BISHOP;
     case 'r':
-      return ROOK;
+      return NewPiece::ROOK;
     case 'q':
-      return QUEEN;
+      return NewPiece::QUEEN;
     case 'p':
-      return PAWN;
+      return NewPiece::PAWN;
     default:
       perror("invalid FEN!");
       exit(EXIT_FAILURE);
-      return PAWN;
+      return NewPiece::PAWN;
   }
 }
 
 /**
  * help on splitting a string: https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-chttps://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
  */
-void FENparser::parseFenOnBoard(std::string fen, Board *board) {
+void FENparser::parseFenOnBoard(std::string fen, NewBoard *board) {
   std::string space = " ";
   std::string boardFEN = fen.substr(0, fen.find(space));
   int file = 0, rank = 7;
-
-  std::vector<Piece> pieceVector;
 
   for(auto &i : boardFEN) {
     if(i == '/') {
@@ -44,41 +42,13 @@ void FENparser::parseFenOnBoard(std::string fen, Board *board) {
       if(isdigit(i)) {
         file += i-'0';
       } else {
-        Team pieceColour = (isupper(i)) ? WHITE : BLACK;
-        Piece_Type pieceType = pieceTypeFromSymbol(tolower(i));
-        Piece piece(pieceType, pieceColour, file, rank);
-        pieceVector.push_back(piece);
+        NewPiece::Team pieceColour = (isupper(i)) ? NewPiece::WHITE : NewPiece::BLACK;
+        NewPiece::Piece_Type pieceType = pieceTypeFromSymbol(tolower(i));
+        int piece = pieceType | pieceColour;
+        board->theBoard[rank][file] = piece;
         file++;
       }
     }
-  }
-  for(auto &i : pieceVector) {
-    std::unique_ptr<Piece> piece;
-    switch(i.getType()) {
-      case KING:
-        piece = std::make_unique<King>(i.getTeam(), i.getFile(), i.getRank());
-        break;
-      case KNIGHT:
-        piece = std::make_unique<Knight>(i.getTeam(), i.getFile(), i.getRank());
-        break;
-      case PAWN:
-        piece = std::make_unique<Pawn>(i.getTeam(), i.getFile(), i.getRank());
-        break;
-      case BISHOP:
-        piece = std::make_unique<Bishop>(i.getTeam(), i.getFile(), i.getRank());
-        break;
-      case QUEEN:
-        piece = std::make_unique<Queen>(i.getTeam(), i.getFile(), i.getRank());
-        break;
-      case ROOK:
-        piece = std::make_unique<Rook>(i.getTeam(), i.getFile(), i.getRank());
-        break;
-      default:
-        perror("something went wrong parsing FEN\n");
-        piece = std::make_unique<Piece>();
-        break;
-    }
-    board->addPiece(std::move(piece));
   }
 }
 

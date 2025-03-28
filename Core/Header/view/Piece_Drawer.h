@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
-#include "Piece.h"
+#include "NewPiece.h"
 
 class Piece_Drawer {
 
@@ -30,8 +30,8 @@ class Piece_Drawer {
 
   public:
     Piece_Drawer(sf::RenderWindow *window, int pixelSquareWidth);
-    void draw_piece(Piece_Type, Team, int file, int rank);
+    void draw_piece(NewPiece::Piece_Type, NewPiece::Team, int file, int rank);
 
   private:
-    sf::Texture& whatTexture(Piece_Type pieceType, Team team);
+    sf::Texture& whatTexture(NewPiece::Piece_Type pieceType, NewPiece::Team team);
 };

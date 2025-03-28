@@ -1,7 +1,7 @@
 #include "Chess_Game.h"
 #include "Window_Handler.h"
 #include "FENparser.h"
-#include "Board.h"
+#include "NewBoard.h"
 
 #include <iostream>
 
@@ -17,8 +17,7 @@ void Chess_Game::run_chess() {
   
   FENparser parser;
   std::string fen = parser.requestFEN();
-  Board board;
-  board.initBoard();
+  NewBoard board;
   parser.parseFenOnBoard(fen, &board);
   board.printBoard();
   Window_Handler windowHandler(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -32,9 +31,9 @@ void Chess_Game::run_chess() {
       }
 
       if(event.type == sf::Event::KeyPressed) {
-        if(event.key.code == sf::Keyboard::A) {
-          std::cout << "updating window..\n";
-        }
+        /**
+         * Do anything
+         */
       }
 
       windowHandler.window.clear();

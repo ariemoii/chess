@@ -1,5 +1,4 @@
 #include "Window_Handler.h"
-#include "Piece_Drawer.h"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -9,7 +8,8 @@ Window_Handler::Window_Handler(int screenHeight, int screenWidth) :
 SCREEN_WIDTH(screenWidth), 
 SCREEN_HEIGHT(screenHeight),
 PIXEL_SQUARE_WIDTH(screenWidth/NUM_SQUARES_SIDE),
-window(sf::VideoMode({SCREEN_HEIGHT, SCREEN_WIDTH}), "Chess Application", sf::Style::Close | sf::Style::Titlebar) {
+window(sf::VideoMode({SCREEN_HEIGHT, SCREEN_WIDTH}), "Chess Application", sf::Style::Close | sf::Style::Titlebar),
+pieceDrawer(Piece_Drawer(&window, PIXEL_SQUARE_WIDTH)) {
   draw_board_background();
   //window.display();
 }
@@ -47,14 +47,13 @@ bool Window_Handler::nextEvent() {
   return window.waitEvent(event);
 }
 
-void Window_Handler::draw_board(Board *board) {
-  Piece_Drawer pieceDrawer(&window, PIXEL_SQUARE_WIDTH);
-  for(int i = 7; i >= 0; i--) {
+void Window_Handler::draw_board(NewBoard *board) {
+  for(int i = 0; i <8; i++) {
     for(int j = 0; j < 8; j++) {
-      if(board->theBoard[i][j]->getType() == NIKS) {
+      if(board->theBoard[i][j] == 0) {
         continue;
       }
-      pieceDrawer.draw_piece(board->theBoard[i][j]->getType(), board->theBoard[i][j]->getTeam(), i, j);
+      pieceDrawer.draw_piece(NewPiece::getType(board->theBoard[i][j]), NewPiece::getTeam(board->theBoard[i][j]), i, j);
     }
   }
 }

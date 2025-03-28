@@ -1,6 +1,6 @@
 #pragma once
-#include "Piece.h"
-#include "Board.h"
+#include "NewPiece.h"
+#include "NewBoard.h"
 
 #include <string>
 
@@ -12,9 +12,9 @@
 class FENparser {
   public:
     FENparser();
-    void parseFenOnBoard(std::string FEN, Board *board);
+    void parseFenOnBoard(std::string FEN, NewBoard *board);
     std::string requestFEN();
 
   private:
-    Piece_Type pieceTypeFromSymbol(char i);
+    NewPiece::Piece_Type pieceTypeFromSymbol(char i);
 };

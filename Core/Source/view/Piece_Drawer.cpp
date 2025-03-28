@@ -30,7 +30,7 @@ PIXEL_SQUARE_WIDTH(pixelSquareWidth) {
 /**
  * draws the piece on the window
  */
-void Piece_Drawer::draw_piece(Piece_Type pieceType, Team team, int file, int rank) {
+void Piece_Drawer::draw_piece(NewPiece::Piece_Type pieceType, NewPiece::Team team, int file, int rank) {
   sf::Sprite sprite(whatTexture(pieceType, team));
   sprite.setScale({0.75f,0.75f});
   sprite.setPosition({rank*PIXEL_SQUARE_WIDTH, file*PIXEL_SQUARE_WIDTH});
@@ -40,39 +40,39 @@ void Piece_Drawer::draw_piece(Piece_Type pieceType, Team team, int file, int ran
 /**
  * Gets the texture of the requested piece
  */
-sf::Texture& Piece_Drawer::whatTexture(Piece_Type pieceType, Team team) {
+sf::Texture& Piece_Drawer::whatTexture(NewPiece::Piece_Type pieceType, NewPiece::Team team) {
   switch(team) {
-    case WHITE:
+    case NewPiece::WHITE:
       switch(pieceType) {
-        case PAWN:
+        case NewPiece::PAWN:
           return white_pawn;
-        case KNIGHT: 
+        case NewPiece::KNIGHT: 
           return white_knight;
-        case KING:
+        case NewPiece::KING:
           return white_king;
-        case ROOK:
+        case NewPiece::ROOK:
           return white_rook;
-        case QUEEN:
+        case NewPiece::QUEEN:
           return white_queen;
-        case BISHOP:
+        case NewPiece::BISHOP:
           return white_bishop;
         default:
           std::cout << "piecetype doesnt exist\n";
       }
       break;
-    case BLACK:
+    case NewPiece::BLACK:
       switch(pieceType) {
-        case PAWN:
+        case NewPiece::PAWN:
           return black_pawn;
-        case KNIGHT: 
+        case NewPiece::KNIGHT: 
           return black_knight;
-        case KING:
+        case NewPiece::KING:
           return black_king;
-        case ROOK:
+        case NewPiece::ROOK:
           return black_rook;
-        case QUEEN:
+        case NewPiece::QUEEN:
           return black_queen;
-        case BISHOP:
+        case NewPiece::BISHOP:
           return black_bishop;
         default:
           perror("Piece type doesnt exist");

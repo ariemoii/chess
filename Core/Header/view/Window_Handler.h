@@ -2,7 +2,9 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
-#include "Board.h"
+
+#include "NewBoard.h"
+#include "Piece_Drawer.h"
 
 /**
  * Class that handles the window
@@ -13,6 +15,7 @@ class Window_Handler {
     static constexpr int NUM_SQUARES_SIDE = 8;
     const int SCREEN_HEIGHT;
     const int PIXEL_SQUARE_WIDTH;
+    Piece_Drawer pieceDrawer;
   
     public:
       sf::Event event;
@@ -25,7 +28,7 @@ class Window_Handler {
     Window_Handler(int screenHeight, int screenWidth);
     sf::RenderWindow window;
     bool nextEvent();
-    void draw_board(Board *board);
+    void draw_board(NewBoard *board);
     void draw_board_background();
     
   private:
