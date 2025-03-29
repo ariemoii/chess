@@ -6,23 +6,38 @@
 MoveMaker::MoveMaker(){};
 
 
-void MoveMaker::makeMove(Move move, Board* board) {
-  int fromFile = move.fromSquare.file, fromRank = move.fromSquare.rank;
-  int toFile = move.toSquare.file, toRank = move.toSquare.rank;
+void MoveMaker::makeMove(Move move, Board* board, Piece::Team humanTeam) {
+  int fromFile, fromRank;
+  int toFile, toRank;
+
+  if(humanTeam == Piece::WHITE) {
+    fromFile = 7-move.fromSquare.file;
+    fromRank = 7-move.fromSquare.rank;
+    toFile = 7-move.toSquare.file;
+    toRank = 7-move.toSquare.rank;
+  } else {
+    fromFile = move.fromSquare.file;
+    fromRank = move.fromSquare.rank;
+    toFile = move.toSquare.file;
+    toRank = move.toSquare.rank;
+  }
   int piece = board->theBoard[fromFile][fromRank];
-
-  std::cout << "from " << fromFile << fromRank;
-  std::cout << " to " << toFile << toRank;
-  std::cout << "piece here = \n";
-  if(Piece::getTeam(piece) == Piece::WHITE) {
-    std::cout << "white ";
+  if(piece == 0) {
+    //no piece here
+    return;
   }
-  if(Piece::getTeam(piece) == Piece::BLACK) {
-    std::cout << "black ";
-  }
-  std::cout << Piece::getType(piece) << std::endl;
-
   board->theBoard[fromFile][fromRank] = 0;
   board->theBoard[toFile][toRank] = piece;
+
+
+  // if(humanTeam == Piece::WHITE) {
+  //   int piece = board->theBoard[7-fromFile][7-fromRank];
+  //   board->theBoard[7-fromFile][7-fromRank] = 0;
+  //   board->theBoard[7-toFile][7-toRank] = piece;
+  // } else {
+  //   int piece = board->theBoard[fromFile][fromRank];
+  //   board->theBoard[fromFile][fromRank] = 0;
+  //   board->theBoard[toFile][toRank] = piece;
+  // }
   return;
 }

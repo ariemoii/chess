@@ -32,8 +32,9 @@ void ChessGame::runChess() {
           //left mouse button has been pressed
           Square pressedSquare = windowHandler.whatSquare(event.mouseButton.x, event.mouseButton.y);
           Move move = windowHandler.getMove(pressedSquare);
-          std::cout << "now making move\n";
-          moveMaker.makeMove(move, &board);
+          moveMaker.makeMove(move, &board, board.getHumanTeam());
+          board.printBoard();
+          std::cout << "\n";
         }
       }
       renderAll(&windowHandler, &board);
