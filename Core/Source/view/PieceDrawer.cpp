@@ -33,7 +33,7 @@ PIXEL_SQUARE_WIDTH(pixelSquareWidth) {
 void PieceDrawer::drawPiece(Piece::PieceType pieceType, Piece::Team team, int file, int rank) {
   sf::Sprite sprite(whatTexture(pieceType, team));
   sprite.setScale({0.75f,0.75f});
-  sprite.setPosition({rank*PIXEL_SQUARE_WIDTH, file*PIXEL_SQUARE_WIDTH});
+  sprite.setPosition({file*PIXEL_SQUARE_WIDTH, rank*PIXEL_SQUARE_WIDTH});
   window->draw(sprite);
 }
 

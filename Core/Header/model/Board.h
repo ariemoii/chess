@@ -2,14 +2,17 @@
 #include "Piece.h"
 #include <iostream>
 
-
+/**
+ * I am using the 0x88 board representation. Reference:
+ * https://web.archive.org/web/20071027053053/http://www.brucemo.com/compchess/programming/0x88.htm
+ */
 
 class Board {
   
   enum TypeGame { HumanVHuman, HumanVAI };
 
   public:
-    static int theBoard[8][8];
+    static int theBoard[0x88];
 
   private:
     Piece::Team humanTeam;

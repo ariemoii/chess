@@ -44,15 +44,15 @@ void WindowHandler::drawBoardBackground() {
 }
 
 void WindowHandler::drawBoard(Board *board, Piece::Team bottomTeam) {
-  for(int i = 0; i <8; i++) {
+  for(int i = 0; i < 8; i++) {
     for(int j = 0; j < 8; j++) {
-      if(board->theBoard[i][j] == 0) {
+      if(board->theBoard[i*16+j] == 0) {
         continue;
       }
       if(bottomTeam == Piece::WHITE) {
-        pieceDrawer.drawPiece(Piece::getType(board->theBoard[i][j]), Piece::getTeam(board->theBoard[i][j]), 7-i, 7-j);
+        pieceDrawer.drawPiece(Piece::getType(board->theBoard[i*16+j]), Piece::getTeam(board->theBoard[i*16+j]), 7-j, 7-i);
       } else {
-        pieceDrawer.drawPiece(Piece::getType(board->theBoard[i][j]), Piece::getTeam(board->theBoard[i][j]), i, j);
+        pieceDrawer.drawPiece(Piece::getType(board->theBoard[i*16+j]), Piece::getTeam(board->theBoard[i*16+j]), j, i);
       }
     }
   }
@@ -74,8 +74,8 @@ Move WindowHandler::getMove(Square squarePressed) {
 
 Square WindowHandler::whatSquare(int xCoord, int yCoord) {
   int file, rank;
-  file = yCoord/PIXEL_SQUARE_WIDTH;
-  rank = xCoord/PIXEL_SQUARE_WIDTH;
+  file = xCoord/PIXEL_SQUARE_WIDTH;
+  rank = yCoord/PIXEL_SQUARE_WIDTH;
   Square sq;
   sq.file = file;
   sq.rank = rank;

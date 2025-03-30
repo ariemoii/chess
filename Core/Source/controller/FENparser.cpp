@@ -45,7 +45,7 @@ void FENparser::parseFenOnBoard(std::string fen, Board *board) {
         Piece::Team pieceColour = (isupper(i)) ? Piece::WHITE : Piece::BLACK;
         Piece::PieceType pieceType = pieceTypeFromSymbol(tolower(i));
         int piece = pieceType | pieceColour;
-        board->theBoard[rank][file] = piece;
+        board->theBoard[rank*16 + file] = piece;
         file++;
       }
     }
