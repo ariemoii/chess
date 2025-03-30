@@ -12,7 +12,7 @@ class Board {
   enum TypeGame { HumanVHuman, HumanVAI };
 
   public:
-    static int theBoard[0x88];
+    static int theBoard[16*8];
 
   private:
     Piece::Team humanTeam;

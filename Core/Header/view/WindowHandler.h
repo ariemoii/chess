@@ -32,8 +32,8 @@ class WindowHandler {
     sf::RenderWindow window;
     void drawBoard(Board *board, Piece::Team bottomTeam);
     void drawBoardBackground();
-    Move getMove(Square squarePressed);
-    Square whatSquare(int xCoord, int yCoord);
+    Move getMove(int squarePressed);
+    int whatSquare(int xCoord, int yCoord);
 
   private:
     /**

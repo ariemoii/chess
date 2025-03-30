@@ -6,28 +6,25 @@
 MoveMaker::MoveMaker(){};
 
 
-void MoveMaker::tryMakeMove(Move move, Board* board, Piece::Team humanTeam) {
-  int fromFile, fromRank;
-  int toFile, toRank;
+void MoveMaker::makeMove(Move move, Board* board, Piece::Team humanTeam) {
+  int fromSquare, toSquare;
 
   if(humanTeam == Piece::WHITE) {
-    fromFile = 7-move.fromSquare.file;
-    fromRank = 7-move.fromSquare.rank;
-    toFile = 7-move.toSquare.file;
-    toRank = 7-move.toSquare.rank;
+    //((7*16)+7) is needed because the board is mirrored
+    //when looking at it from whites perspective
+    fromSquare = ((7*16)+7)-move.fromSquare;
+    toSquare = ((7*16)+7)-move.toSquare;
   } else {
-    fromFile = move.fromSquare.file;
-    fromRank = move.fromSquare.rank;
-    toFile = move.toSquare.file;
-    toRank = move.toSquare.rank;
+    fromSquare = move.fromSquare;
+    toSquare = move.toSquare;
   }
-  int piece = board->theBoard[fromRank*16 + fromFile];
+  int piece = board->theBoard[fromSquare];
   if(piece == 0) {
     //no piece here
     return;
   }
-  board->theBoard[fromRank*16+ fromFile] = 0;
-  board->theBoard[toRank*16 + toFile] = piece;
+  board->theBoard[fromSquare] = 0;
+  board->theBoard[toSquare] = piece;
 
 
 

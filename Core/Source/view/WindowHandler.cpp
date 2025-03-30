@@ -19,7 +19,7 @@ void WindowHandler::drawSquare(bool isLightSquare, int xCoord, int yCoord) {
   if(isLightSquare) {
     rectangle.setFillColor(sf::Color(139, 69, 19));
   } else {
-    rectangle.setFillColor(sf::Color(250, 240, 230));
+    rectangle.setFillColor(sf::Color(240, 230, 220));
   }
   rectangle.setSize(sf::Vector2f(PIXEL_SQUARE_WIDTH, PIXEL_SQUARE_WIDTH));
   rectangle.setPosition({xCoord, yCoord});
@@ -58,7 +58,7 @@ void WindowHandler::drawBoard(Board *board, Piece::Team bottomTeam) {
   }
 }
 
-Move WindowHandler::getMove(Square squarePressed) {
+Move WindowHandler::getMove(int squarePressed) {
   sf::Event event;
   Move move;
   move.fromSquare = squarePressed;
@@ -72,12 +72,10 @@ Move WindowHandler::getMove(Square squarePressed) {
   return move;
 }
 
-Square WindowHandler::whatSquare(int xCoord, int yCoord) {
+int WindowHandler::whatSquare(int xCoord, int yCoord) {
   int file, rank;
   file = xCoord/PIXEL_SQUARE_WIDTH;
   rank = yCoord/PIXEL_SQUARE_WIDTH;
-  Square sq;
-  sq.file = file;
-  sq.rank = rank;
+  int sq = rank*16 + file;
   return sq;
 }

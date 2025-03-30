@@ -18,6 +18,7 @@ void ChessGame::runChess() {
   WindowHandler windowHandler(SCREEN_WIDTH, SCREEN_HEIGHT);
   MoveMaker moveMaker;
   sf::Event event;
+  board.printBoard();
 
   //main loop for human v human game
   while(windowHandler.window.isOpen()) {
@@ -30,9 +31,9 @@ void ChessGame::runChess() {
       if(event.type == sf::Event::MouseButtonPressed) {
         if(event.mouseButton.button == sf::Mouse::Left) {
           //left mouse button has been pressed
-          Square pressedSquare = windowHandler.whatSquare(event.mouseButton.x, event.mouseButton.y);
+          int pressedSquare = windowHandler.whatSquare(event.mouseButton.x, event.mouseButton.y);
           Move move = windowHandler.getMove(pressedSquare);
-          moveMaker.tryMakeMove(move, &board, board.getHumanTeam());
+          moveMaker.makeMove(move, &board, board.getHumanTeam());
         }
       }
       renderAll(&windowHandler, &board);

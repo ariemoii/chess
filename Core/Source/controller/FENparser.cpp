@@ -31,22 +31,22 @@ Piece::PieceType FENparser::pieceTypeFromSymbol(char i) {
 void FENparser::parseFenOnBoard(std::string fen, Board *board) {
   std::string space = " ";
   std::string boardFEN = fen.substr(0, fen.find(space));
-  int file = 0, rank = 7;
+  int file = 7, rank = 7;
 
   for(auto &i : boardFEN) {
     if(i == '/') {
       //new rank;
-      file = 0;
+      file = 7;
       rank--;
     } else {
       if(isdigit(i)) {
-        file += i-'0';
+        file -= i-'0';
       } else {
         Piece::Team pieceColour = (isupper(i)) ? Piece::WHITE : Piece::BLACK;
         Piece::PieceType pieceType = pieceTypeFromSymbol(tolower(i));
         int piece = pieceType | pieceColour;
         board->theBoard[rank*16 + file] = piece;
-        file++;
+        file--;
       }
     }
   }

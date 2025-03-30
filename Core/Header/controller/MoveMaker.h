@@ -14,7 +14,7 @@ class MoveMaker {
   public: 
     MoveMaker();
     
-    void tryMakeMove(Move move, Board* board, Piece::Team humanTeam);
+    void makeMove(Move move, Board* board, Piece::Team humanTeam);
     
 };
 
