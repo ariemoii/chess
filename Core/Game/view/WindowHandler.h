@@ -3,9 +3,9 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
-#include "Board.h"
-#include "PieceDrawer.h"
-#include "Move.h"
+#include "model/Board.h"
+#include "view/PieceDrawer.h"
+#include "model/Move.h"
 
 /**
  * Class that handles the window
@@ -32,7 +32,7 @@ class WindowHandler {
     sf::RenderWindow window;
     void drawBoard(Board *board, Piece::Team bottomTeam);
     void drawBoardBackground();
-    Move getMove(int squarePressed);
+    Move getMove(int squarePressed, Piece::Team humanTeam);
     int whatSquare(int xCoord, int yCoord);
 
   private:

@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
-#include "Piece.h"
+#include "model/Piece.h"
 
 class PieceDrawer {
 

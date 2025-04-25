@@ -43,3 +43,7 @@ Piece::PieceType Piece::getType(int piece) {
   }
   return Piece::NIKS;
 }
+
+bool Piece::isSlidingPiece(int piece) {
+  return (isType(piece, Piece::BISHOP) || isType(piece, Piece::ROOK) || isType(piece, Piece::QUEEN));
+}

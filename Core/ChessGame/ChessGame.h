@@ -1,8 +1,8 @@
 #pragma once
-#include "WindowHandler.h"
-#include "FENparser.h"
-#include "Board.h"
-#include "MoveMaker.h"
+#include "view/WindowHandler.h"
+#include "controller/FENparser.h"
+#include "model/Board.h"
+#include "controller/MoveMaker.h"
 
 class ChessGame {
   

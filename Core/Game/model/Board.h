@@ -1,5 +1,5 @@
 #pragma once
-#include "Piece.h"
+#include "model/Piece.h"
 #include <iostream>
 
 /**

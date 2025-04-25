@@ -19,7 +19,7 @@ void WindowHandler::drawSquare(bool isLightSquare, int xCoord, int yCoord) {
   if(isLightSquare) {
     rectangle.setFillColor(sf::Color(139, 69, 19));
   } else {
-    rectangle.setFillColor(sf::Color(240, 230, 220));
+    rectangle.setFillColor(sf::Color(255, 225, 190));
   }
   rectangle.setSize(sf::Vector2f(PIXEL_SQUARE_WIDTH, PIXEL_SQUARE_WIDTH));
   rectangle.setPosition({xCoord, yCoord});
@@ -58,7 +58,7 @@ void WindowHandler::drawBoard(Board *board, Piece::Team bottomTeam) {
   }
 }
 
-Move WindowHandler::getMove(int squarePressed) {
+Move WindowHandler::getMove(int squarePressed, Piece::Team humanTeam) {
   sf::Event event;
   Move move;
   move.fromSquare = squarePressed;
@@ -68,6 +68,12 @@ Move WindowHandler::getMove(int squarePressed) {
       move.toSquare = whatSquare(event.mouseButton.x, event.mouseButton.y);
       break;
     }
+  }
+  if(humanTeam == Piece::WHITE) {
+    //((7*16)+7) is needed because the board is mirrored
+    //when looking at it from whites perspective
+    move.fromSquare = ((7*16)+7)-move.fromSquare;
+    move.toSquare = ((7*16)+7)-move.toSquare;
   }
   return move;
 }

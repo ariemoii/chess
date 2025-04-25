@@ -32,7 +32,6 @@ void FENparser::parseFenOnBoard(std::string fen, Board *board) {
   std::string space = " ";
   std::string boardFEN = fen.substr(0, fen.find(space));
   int file = 7, rank = 7;
-
   for(auto &i : boardFEN) {
     if(i == '/') {
       //new rank;

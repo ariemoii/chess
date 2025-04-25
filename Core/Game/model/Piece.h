@@ -13,6 +13,8 @@ class Piece {
     static Team getTeam(int piece);
     static bool isType(int piece, PieceType pieceType);
     static bool isTeam(int piece, Team team);
+    static bool isSlidingPiece(int piece);
+
 
   private:
     

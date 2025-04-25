@@ -5,12 +5,13 @@ project "Chess-Core"
    targetdir "Binaries/%{cfg.buildcfg}"
    staticruntime "off"
 
-   files { "Header/**.h", "Source/**.cpp"}
+   files { "Game/**.h", "Game/**.cpp", "Engine/**.h", "Engine/**.cpp", "ChessGame/**.cpp", "ChessGame/**.h" }
 
    includedirs
    {
-    "Source/**",
-    "Header/**",
+    "Game",
+    "Engine",
+    "ChessGame"
    }
 
    targetdir ("../Binaries/" .. OutputDir .. "/%{prj.name}")
