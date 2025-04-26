@@ -1,31 +1,36 @@
 #include "MoveGenerator.h"
 
-MoveGenerator::MoveGenerator() { 
-
+MoveGenerator::MoveGenerator() :
+moveData(MoveData())
+{ 
 };
 
 
-std::vector<Move> MoveGenerator::generatePeudolegalMoves(Board* board, int startSquare) {
+std::vector<Move> MoveGenerator::generatePseudolegalMoves(Board* board, int startSquare) {
   return generateSlidingPieceMoves(startSquare, Piece::getType(board->theBoard[startSquare]), board);
 }
 
 std::vector<Move> MoveGenerator::generateSlidingPieceMoves(int startSquare, Piece::PieceType type, Board* board) {
   int piece = board->theBoard[startSquare];
   std::array<int, 64> slidingArray;
-  if(!Piece::isSlidingPiece(piece)) {
-    perror("is not a sliding piece\n");
+  std::cout << "piecetype = " << Piece::getType(piece) << std::endl;
+  if(!(Piece::isSlidingPiece(piece))) {
+    //perror("is not a sliding piece\n");
+    //return no legal moves
+    std::cout << "is not a sliding piece " << std::endl;
+    return std::vector<Move>();
   }
 
   std::vector<Move> pseudoLegalSlidingMoves;
   switch(type) {
     case Piece::BISHOP:
-      slidingArray = MoveData::bishopMoves;
+      slidingArray = moveData.bishopMoves;
       break;
     case Piece::ROOK:
-      slidingArray = MoveData::rookMoves;
+      slidingArray = moveData.rookMoves;
       break;
     case Piece::QUEEN:
-      slidingArray = MoveData::queenMoves;
+      slidingArray = moveData.queenMoves;
       break;
   }
 
