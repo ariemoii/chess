@@ -13,9 +13,9 @@ class MoveGenerator {
 
   public:
     MoveGenerator();
-    std::vector<Move> generatePseudolegalMoves(Board* board, int startSquare);
+    std::vector<Move> generatePseudolegalMoves(Board* board);
 
   private:
-    std::vector<Move> generateSlidingPieceMoves(int startSquare, Piece::PieceType type, Board* board);
+    void generateSlidingPieceMoves(int startSquare, Piece::PieceType type, Board* board, std::vector<Move>& moveVector);
 
 };

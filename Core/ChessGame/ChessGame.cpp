@@ -33,7 +33,7 @@ void ChessGame::runChess() {
           //left mouse button has been pressed
           int pressedSquare = windowHandler.whatSquare(event.mouseButton.x, event.mouseButton.y);
           Move move = windowHandler.getMove(pressedSquare, board.getHumanTeam());
-          moveMaker.makeMove(move, &board);
+          moveMaker.tryMakeMove(move, &board);
         }
       }
       renderAll(&windowHandler, &board);

@@ -6,22 +6,27 @@ moveData(MoveData())
 };
 
 
-std::vector<Move> MoveGenerator::generatePseudolegalMoves(Board* board, int startSquare) {
-  return generateSlidingPieceMoves(startSquare, Piece::getType(board->theBoard[startSquare]), board);
+std::vector<Move> MoveGenerator::generatePseudolegalMoves(Board* board) {
+  //16*8 is the size of the board
+  std::vector<Move> pseudoLegalMoves;
+  for(int i = 0; i < 16*8; i++) {
+    int piece = board->theBoard[i];
+    if(Piece::isSlidingPiece(piece)) {
+      generateSlidingPieceMoves(i, Piece::getType(piece), board, pseudoLegalMoves);
+    }
+  }
+  return pseudoLegalMoves;
 }
 
-std::vector<Move> MoveGenerator::generateSlidingPieceMoves(int startSquare, Piece::PieceType type, Board* board) {
+void MoveGenerator::generateSlidingPieceMoves(int startSquare, Piece::PieceType type, Board* board, std::vector<Move>& moveVector) {
   int piece = board->theBoard[startSquare];
   std::array<int, 64> slidingArray;
-  std::cout << "piecetype = " << Piece::getType(piece) << std::endl;
   if(!(Piece::isSlidingPiece(piece))) {
     //perror("is not a sliding piece\n");
     //return no legal moves
     std::cout << "is not a sliding piece " << std::endl;
-    return std::vector<Move>();
+    return;
   }
-
-  std::vector<Move> pseudoLegalSlidingMoves;
   switch(type) {
     case Piece::BISHOP:
       slidingArray = moveData.bishopMoves;
@@ -34,18 +39,23 @@ std::vector<Move> MoveGenerator::generateSlidingPieceMoves(int startSquare, Piec
       break;
   }
 
+
   for(const auto &i : slidingArray) {
     if(i == 0) {
       break;
     }
-    Move move;
-    move.fromSquare = startSquare;
-    move.toSquare = startSquare+i;
-    if(move.toSquare & 0x88) {
-      //move is outside of the board
-      continue;
+    int j = 1;
+    while(1) {
+      Move move;
+      move.fromSquare = startSquare;
+      move.toSquare = startSquare+(i*j);
+      if(move.toSquare & 0x88) {
+        //move is outside of the board
+        break;
+        }
+      j++;
+      moveVector.push_back(move);
     }
-    pseudoLegalSlidingMoves.push_back(move);
   }
-  return pseudoLegalSlidingMoves;
+  return;
 }

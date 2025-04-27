@@ -11,12 +11,6 @@ moveGenerator(MoveGenerator()){
 
 void MoveMaker::makeMove(Move move, Board* board) {
   int piece = board->theBoard[move.fromSquare];
-  std::vector<Move> pseudoLegalMoves = moveGenerator.generatePseudolegalMoves(board, move.fromSquare);
-  if(isLegalMove(move, pseudoLegalMoves)) {
-    std::cout << "move is legal " << std::endl;
-  } else {
-    std::cout << "move is NOT legal " << std::endl;
-  }
   if(piece == 0) {
     //no piece here
     return;
@@ -29,11 +23,12 @@ void MoveMaker::makeMove(Move move, Board* board) {
 
 void MoveMaker::tryMakeMove(Move move, Board* board) {
   int piece = board->theBoard[move.fromSquare];
-  if(Piece::isSlidingPiece(piece)) {
-    std::vector<Move> pseudoLegalMoves = moveGenerator.generatePseudolegalMoves(board, move.fromSquare);
-    if(isLegalMove(move, pseudoLegalMoves)) {
-      makeMove(move, board);
-    }
+  std::vector<Move> pseudoLegalMoves = moveGenerator.generatePseudolegalMoves(board);
+  if(isLegalMove(move, pseudoLegalMoves)) {
+    std::cout << "move is legal " << std::endl;
+    makeMove(move, board);
+  } else {
+    std::cout << "move is NOT legal " << std::endl;
   }
 }
 
