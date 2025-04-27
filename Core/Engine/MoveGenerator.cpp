@@ -52,7 +52,25 @@ void MoveGenerator::generateSlidingPieceMoves(int startSquare, Piece::PieceType 
       if(move.toSquare & 0x88) {
         //move is outside of the board
         break;
+      }
+      if(board->theBoard[move.toSquare] != 0) {
+        //we are moving onto a piece
+        
+        /**
+         * TODO: implement side to move; replace ourTeam variable
+         */
+
+        Piece::Team ourTeam = Piece::getTeam(piece);
+        int capturePiece = board->theBoard[move.toSquare];
+        if(Piece::getTeam(capturePiece) == ourTeam) {
+          //we cannot move further
+          break;
+        } else {
+          //we are capturing an enemy piece
+          moveVector.push_back(move);
+          break;
         }
+      }
       j++;
       moveVector.push_back(move);
     }
