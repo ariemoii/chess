@@ -26,7 +26,4 @@ class Board {
     void askTypeGame();
 
     Piece::Team getHumanTeam() { return humanTeam; };
-
-    //make a 'flip board' function: if human v human,
-    //white make move, flip board so black can make move.
 };

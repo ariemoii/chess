@@ -13,9 +13,10 @@ std::vector<Move> MoveGenerator::generatePseudolegalMoves(Board* board) {
     int piece = board->theBoard[i];
     if(Piece::isSlidingPiece(piece)) {
       generateSlidingPieceMoves(i, Piece::getType(piece), board, pseudoLegalMoves);
-    }
-    if(Piece::isType(piece, Piece::KNIGHT)) {
+    } else if(Piece::isType(piece, Piece::KNIGHT)) {
       generateKnightMoves(i, board, pseudoLegalMoves);
+    } else if(Piece::isType(piece, Piece::KING)) {
+      generateKingMoves(i, board, pseudoLegalMoves);
     }
   }
   return pseudoLegalMoves;
@@ -57,7 +58,7 @@ void MoveGenerator::generateSlidingPieceMoves(int startSquare, Piece::PieceType 
         //move is outside of the board
         break;
       }
-      if(board->theBoard[move.toSquare] != 0) {
+      if(board->theBoard[move.toSquare]) {
         //we are moving onto a piece
         if(isLegalCapture(move, board)) {
           moveVector.push_back(move);
@@ -88,7 +89,6 @@ bool MoveGenerator::isLegalCapture(Move move, Board* board) {
 }
 
 void MoveGenerator::generateKnightMoves(int startSquare, Board* board, std::vector<Move>& moveVector) {
-  Piece::Team ourTeam = Piece::getTeam(board->theBoard[startSquare]);
   for(const auto &i : moveData.knightMoves) {
     if(i == 0) {
       break;
@@ -100,7 +100,31 @@ void MoveGenerator::generateKnightMoves(int startSquare, Board* board, std::vect
       //move is outside of the board
       continue;
     }
-    if(board->theBoard[move.toSquare] != 0) {
+    if(board->theBoard[move.toSquare]) {
+      //we are trying to capture
+      if(isLegalCapture(move, board)) {
+        moveVector.push_back(move);
+      }
+      continue;
+    }
+    moveVector.push_back(move);
+  }
+  return;
+}
+
+void MoveGenerator::generateKingMoves(int startSquare, Board* board, std::vector<Move>& moveVector) {
+  for(auto &i : moveData.kingMoves) {
+    if(i == 0) {
+      break;
+    }
+    Move move;
+    move.fromSquare = startSquare;
+    move.toSquare = startSquare+i;
+    if(move.toSquare & 0x88) {
+      //move is outside of the board
+      continue;
+    }
+    if(board->theBoard[move.toSquare]) {
       //we are trying to capture
       if(isLegalCapture(move, board)) {
         moveVector.push_back(move);
