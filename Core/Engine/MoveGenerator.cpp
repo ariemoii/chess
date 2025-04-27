@@ -14,6 +14,9 @@ std::vector<Move> MoveGenerator::generatePseudolegalMoves(Board* board) {
     if(Piece::isSlidingPiece(piece)) {
       generateSlidingPieceMoves(i, Piece::getType(piece), board, pseudoLegalMoves);
     }
+    if(Piece::isType(piece, Piece::KNIGHT)) {
+      generateKnightMoves(i, board, pseudoLegalMoves);
+    }
   }
   return pseudoLegalMoves;
 }
@@ -27,6 +30,8 @@ void MoveGenerator::generateSlidingPieceMoves(int startSquare, Piece::PieceType 
     std::cout << "is not a sliding piece " << std::endl;
     return;
   }
+
+  //get the correct piece movement table
   switch(type) {
     case Piece::BISHOP:
       slidingArray = moveData.bishopMoves;
@@ -38,7 +43,6 @@ void MoveGenerator::generateSlidingPieceMoves(int startSquare, Piece::PieceType 
       slidingArray = moveData.queenMoves;
       break;
   }
-
 
   for(const auto &i : slidingArray) {
     if(i == 0) {
@@ -55,25 +59,55 @@ void MoveGenerator::generateSlidingPieceMoves(int startSquare, Piece::PieceType 
       }
       if(board->theBoard[move.toSquare] != 0) {
         //we are moving onto a piece
-        
-        /**
-         * TODO: implement side to move; replace ourTeam variable
-         */
-
-        Piece::Team ourTeam = Piece::getTeam(piece);
-        int capturePiece = board->theBoard[move.toSquare];
-        if(Piece::getTeam(capturePiece) == ourTeam) {
-          //we cannot move further
-          break;
-        } else {
-          //we are capturing an enemy piece
+        if(isLegalCapture(move, board)) {
           moveVector.push_back(move);
-          break;
         }
+        break;
       }
       j++;
       moveVector.push_back(move);
     }
+  }
+  return;
+}
+
+bool MoveGenerator::isLegalCapture(Move move, Board* board) {
+  /**
+  * TODO: implement side to move; replace ourTeam variable
+  */
+  int piece = board->theBoard[move.fromSquare];
+  Piece::Team ourTeam = Piece::getTeam(piece);
+  int capturePiece = board->theBoard[move.toSquare];
+  if(Piece::getTeam(capturePiece) == ourTeam) {
+    //we cannot capture our own piece
+    return false;
+  } else {
+    //we are capturing an enemy piece
+    return true;
+  }
+}
+
+void MoveGenerator::generateKnightMoves(int startSquare, Board* board, std::vector<Move>& moveVector) {
+  Piece::Team ourTeam = Piece::getTeam(board->theBoard[startSquare]);
+  for(const auto &i : moveData.knightMoves) {
+    if(i == 0) {
+      break;
+    }
+    Move move;
+    move.fromSquare = startSquare;
+    move.toSquare = startSquare+i;
+    if(move.toSquare & 0x88) {
+      //move is outside of the board
+      continue;
+    }
+    if(board->theBoard[move.toSquare] != 0) {
+      //we are trying to capture
+      if(isLegalCapture(move, board)) {
+        moveVector.push_back(move);
+      }
+      continue;
+    }
+    moveVector.push_back(move);
   }
   return;
 }
