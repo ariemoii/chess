@@ -19,6 +19,7 @@ class MoveGenerator {
     void generateSlidingPieceMoves(int startSquare, Piece::PieceType type, Board* board, std::vector<Move>& moveVector);
     void generateKnightMoves(int startSquare, Board* board, std::vector<Move>& moveVector);
     void generateKingMoves(int startSquare, Board* board, std::vector<Move>& moveVector);
+    void generatePawnMoves(int startSquare, Board* board, std::vector<Move>& moveVector);
     bool isLegalCapture(Move move, Board* board);
 
 };

@@ -17,6 +17,8 @@ std::vector<Move> MoveGenerator::generatePseudolegalMoves(Board* board) {
       generateKnightMoves(i, board, pseudoLegalMoves);
     } else if(Piece::isType(piece, Piece::KING)) {
       generateKingMoves(i, board, pseudoLegalMoves);
+    } else if(Piece::isType(piece, Piece::PAWN)) {
+      generatePawnMoves(i, board, pseudoLegalMoves);
     }
   }
   return pseudoLegalMoves;
@@ -134,4 +136,26 @@ void MoveGenerator::generateKingMoves(int startSquare, Board* board, std::vector
     moveVector.push_back(move);
   }
   return;
+}
+
+void MoveGenerator::generatePawnMoves(int startSquare, Board* board, std::vector<Move>& moveVector) {
+  Piece::Team sideToMove = Piece::getTeam(board->theBoard[startSquare]);
+  int startRank = (sideToMove == Piece::WHITE) ? 1 : 6;
+  int promotionRank = (sideToMove == Piece::WHITE) ? 6 : 1;
+  int dirOffset = (sideToMove == Piece::WHITE) ? MoveData::N : MoveData::S;
+  int currRank = startSquare >> 4;
+
+  //forward moves
+  if((!board->theBoard[startSquare+dirOffset]) && (!(0x88 & (startSquare+dirOffset)))) {
+    //there is no piece in the way
+    //and move is not out of the board
+    moveVector.push_back({ startSquare, startSquare+dirOffset });
+  }
+  if(startRank == currRank && (!board->theBoard[startSquare+dirOffset*2]) && (!board->theBoard[startSquare+dirOffset]) 
+    && (!(0x88 & (startSquare+dirOffset*2)))) {
+    //we are on start rank
+    //there is no piece in the way
+    //move is not out of board
+    moveVector.push_back({ startSquare, startSquare+dirOffset*2 });
+  }
 }

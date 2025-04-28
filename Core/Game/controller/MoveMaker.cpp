@@ -17,7 +17,6 @@ void MoveMaker::makeMove(Move move, Board* board) {
   }
   board->theBoard[move.fromSquare] = 0;
   board->theBoard[move.toSquare] = piece;
-
   return;
 }
 

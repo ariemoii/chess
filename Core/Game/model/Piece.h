@@ -15,7 +15,6 @@ class Piece {
     static bool isTeam(int piece, Team team);
     static bool isSlidingPiece(int piece);
 
-
   private:
     
 };
