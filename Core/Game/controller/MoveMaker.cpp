@@ -17,6 +17,13 @@ void MoveMaker::makeMove(Move move, Board* board) {
   }
   board->theBoard[move.fromSquare] = 0;
   board->theBoard[move.toSquare] = piece;
+
+  //we need to change the side to move
+  if(board->sideToMove == Piece::WHITE) {
+    board->sideToMove = Piece::BLACK;
+  } else {
+    board->sideToMove = Piece::WHITE;
+  }
   return;
 }
 

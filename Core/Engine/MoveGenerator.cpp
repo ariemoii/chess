@@ -11,6 +11,7 @@ std::vector<Move> MoveGenerator::generatePseudolegalMoves(Board* board) {
   std::vector<Move> pseudoLegalMoves;
   for(int i = 0; i < 16*8; i++) {
     int piece = board->theBoard[i];
+    if(!Piece::isTeam(piece, board->sideToMove)) continue;
     if(Piece::isSlidingPiece(piece)) {
       generateSlidingPieceMoves(i, Piece::getType(piece), board, pseudoLegalMoves);
     } else if(Piece::isType(piece, Piece::KNIGHT)) {
@@ -75,11 +76,8 @@ void MoveGenerator::generateSlidingPieceMoves(int startSquare, Piece::PieceType 
 }
 
 bool MoveGenerator::isLegalCapture(Move move, Board* board) {
-  /**
-  * TODO: implement side to move; replace ourTeam variable
-  */
   int piece = board->theBoard[move.fromSquare];
-  Piece::Team ourTeam = Piece::getTeam(piece);
+  Piece::Team ourTeam = board->sideToMove;
   int capturePiece = board->theBoard[move.toSquare];
   if(Piece::getTeam(capturePiece) == ourTeam) {
     //we cannot capture our own piece
@@ -141,7 +139,7 @@ void MoveGenerator::generateKingMoves(int startSquare, Board* board, std::vector
 void MoveGenerator::generatePawnMoves(int startSquare, Board* board, std::vector<Move>& moveVector) {
   Piece::Team sideToMove = Piece::getTeam(board->theBoard[startSquare]);
   int startRank = (sideToMove == Piece::WHITE) ? 1 : 6;
-  int promotionRank = (sideToMove == Piece::WHITE) ? 6 : 1;
+  int promotionRank = (sideToMove == Piece::WHITE) ? 7 : 0;
   int dirOffset = (sideToMove == Piece::WHITE) ? MoveData::N : MoveData::S;
   int currRank = startSquare >> 4;
 
@@ -158,4 +156,19 @@ void MoveGenerator::generatePawnMoves(int startSquare, Board* board, std::vector
     //move is not out of board
     moveVector.push_back({ startSquare, startSquare+dirOffset*2 });
   }
+
+  //capture moves
+  if((!(startSquare+dirOffset-1 & 0x88)) && board->theBoard[startSquare+dirOffset-1]) {
+    //we can capture to one side
+    if(isLegalCapture({ startSquare, startSquare+dirOffset-1 }, board)) {
+      moveVector.push_back({ startSquare, startSquare+dirOffset-1 });
+    }
+  }
+  if((!(startSquare+dirOffset+1 & 0x88)) && board->theBoard[startSquare+dirOffset+1]) {
+    //we can capture to the other side
+    if(isLegalCapture({ startSquare, startSquare+dirOffset+1 }, board)) {
+      moveVector.push_back({ startSquare, startSquare+dirOffset+1 });
+    }
+  }
 }
+

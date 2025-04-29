@@ -1,5 +1,7 @@
 #include "FENparser.h"
 #include <iostream>
+#include <vector>
+#include <sstream>
 
 
 FENparser::FENparser(){};
@@ -28,9 +30,15 @@ Piece::PieceType FENparser::pieceTypeFromSymbol(char i) {
 /**
  * help on splitting a string: https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-chttps://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
  */
+//this function assumes it is getting a legal fen string
 void FENparser::parseFenOnBoard(std::string fen, Board *board) {
-  std::string space = " ";
-  std::string boardFEN = fen.substr(0, fen.find(space));
+  std::istringstream iss(fen);
+  std::vector<std::string> words;
+  std::string word;
+  while(iss >> word) {
+    words.push_back(word);
+  }
+  std::string boardFEN = words[0];
   int file = 7, rank = 7;
   for(auto &i : boardFEN) {
     if(i == '/') {
@@ -49,6 +57,13 @@ void FENparser::parseFenOnBoard(std::string fen, Board *board) {
       }
     }
   }
+  std::string sideToMove = words[1];
+  if(sideToMove == "w") {
+    board->sideToMove = Piece::WHITE;
+  } else {
+    board->sideToMove = Piece::BLACK;
+  }
+  std::cout << "sidetomove = " << board->sideToMove << " string = " << sideToMove << std::endl;
 }
 
 std::string FENparser::requestFEN() {

@@ -13,6 +13,10 @@ class Board {
 
   public:
     static int theBoard[16*8];
+    Piece::Team sideToMove;
+
+    //least sig bit for kingside castling, second for queenside castling
+    int blackCastleRights, whiteCastleRights;
 
   private:
     Piece::Team humanTeam;
