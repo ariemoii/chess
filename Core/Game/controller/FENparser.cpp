@@ -57,13 +57,36 @@ void FENparser::parseFenOnBoard(std::string fen, Board *board) {
       }
     }
   }
+  //extract side to move
   std::string sideToMove = words[1];
   if(sideToMove == "w") {
     board->sideToMove = Piece::WHITE;
   } else {
     board->sideToMove = Piece::BLACK;
   }
-  std::cout << "sidetomove = " << board->sideToMove << " string = " << sideToMove << std::endl;
+
+  //extract castling rights
+  std::string castlingRights = words[2];
+  board->blackCastleRights = 0;
+  board->whiteCastleRights = 0;
+  if(castlingRights[0] == '-') {
+    //neither side may castle
+  } else {
+    for(auto &right : castlingRights) {
+      if(right == 'Q') {
+        board->whiteCastleRights |= 0b10;
+      }
+      if(right == 'K') {
+        board->whiteCastleRights |= 0b01;
+      }
+      if(right == 'q') {
+        board->blackCastleRights |= 0b10;
+      }
+      if(right == 'k') {
+        board->blackCastleRights |= 0b01;
+      }
+    }
+  }
 }
 
 std::string FENparser::requestFEN() {
