@@ -28,13 +28,6 @@ std::vector<Move> MoveGenerator::generatePseudolegalMoves(Board* board) {
 void MoveGenerator::generateSlidingPieceMoves(int startSquare, Piece::PieceType type, Board* board, std::vector<Move>& moveVector) {
   int piece = board->theBoard[startSquare];
   std::array<int, 64> slidingArray;
-  if(!(Piece::isSlidingPiece(piece))) {
-    //perror("is not a sliding piece\n");
-    //return no legal moves
-    std::cout << "is not a sliding piece " << std::endl;
-    return;
-  }
-
   //get the correct piece movement table
   switch(type) {
     case Piece::BISHOP:
@@ -117,21 +110,42 @@ void MoveGenerator::generateKingMoves(int startSquare, Board* board, std::vector
     if(i == 0) {
       break;
     }
-    Move move;
-    move.fromSquare = startSquare;
-    move.toSquare = startSquare+i;
-    if(move.toSquare & 0x88) {
+    Move moveNormal;
+    moveNormal.fromSquare = startSquare;
+    moveNormal.toSquare = startSquare+i;
+    if(moveNormal.toSquare & 0x88) {
       //move is outside of the board
       continue;
     }
-    if(board->theBoard[move.toSquare]) {
+    if(board->theBoard[moveNormal.toSquare]) {
       //we are trying to capture
-      if(isLegalCapture(move, board)) {
-        moveVector.push_back(move);
+      if(isLegalCapture(moveNormal, board)) {
+        moveVector.push_back(moveNormal);
       }
       continue;
     }
-    moveVector.push_back(move);
+    moveVector.push_back(moveNormal);
+
+    //castling moves
+    int castlingRights = (board->sideToMove == Piece::WHITE) ? board->whiteCastleRights : board->blackCastleRights;
+    if(castlingRights & 0b01 && (!(startSquare-2 & 0x88))) {
+      //we have kingside castling rights
+      if(!board->theBoard[startSquare-1] && !board->theBoard[startSquare-2]) {
+        //there are no pieces in the way
+        Move moveCastling = { startSquare, startSquare-2 };
+        moveCastling.isCastleKing = true;
+        moveVector.push_back(moveCastling);
+      }
+    }
+    if(castlingRights & 0b10 && (!(startSquare+2 & 0x88))) {
+      //we have queenside castling rights
+      if(!board->theBoard[startSquare+1] && !board->theBoard[startSquare+2]) {
+        //there are no pieces in the way
+        Move move = { startSquare, startSquare+2 };
+        move.isCastleQueen = true;
+        moveVector.push_back(move);
+      }
+    }
   }
   return;
 }

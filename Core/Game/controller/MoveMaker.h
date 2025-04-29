@@ -11,7 +11,7 @@ class MoveMaker {
   public:
 
   private:
-    bool isLegalMove(Move move, std::vector<Move> legalMoveList);
+    bool isLegalMove(Move *move, std::vector<Move> legalMoveList);
 
   public: 
     MoveMaker();
