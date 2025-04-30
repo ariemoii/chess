@@ -6,8 +6,12 @@ struct Move {
 
   bool isCastleKing = false;
   bool isCastleQueen = false;
-  bool isPromote = false;
+  bool isPromoteQ = false;
+  bool isPromoteB = false;
+  bool isPromoteN = false;
+  bool isPromoteR = false;
   bool isEnPassant = false;
+  bool isKingMove = false;
 
   
   bool operator==(const Move& m)  const {

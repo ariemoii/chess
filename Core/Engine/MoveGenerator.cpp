@@ -113,6 +113,7 @@ void MoveGenerator::generateKingMoves(int startSquare, Board* board, std::vector
     Move moveNormal;
     moveNormal.fromSquare = startSquare;
     moveNormal.toSquare = startSquare+i;
+    moveNormal.isKingMove = true;
     if(moveNormal.toSquare & 0x88) {
       //move is outside of the board
       continue;
@@ -151,37 +152,71 @@ void MoveGenerator::generateKingMoves(int startSquare, Board* board, std::vector
 }
 
 void MoveGenerator::generatePawnMoves(int startSquare, Board* board, std::vector<Move>& moveVector) {
-  Piece::Team sideToMove = Piece::getTeam(board->theBoard[startSquare]);
+  Piece::Team sideToMove = board->sideToMove;
   int startRank = (sideToMove == Piece::WHITE) ? 1 : 6;
   int promotionRank = (sideToMove == Piece::WHITE) ? 7 : 0;
   int dirOffset = (sideToMove == Piece::WHITE) ? MoveData::N : MoveData::S;
   int currRank = startSquare >> 4;
 
   //forward moves
-  if((!board->theBoard[startSquare+dirOffset]) && (!(0x88 & (startSquare+dirOffset)))) {
+  Move move1 = {startSquare, startSquare+dirOffset};
+  Move move2 = { startSquare, startSquare+dirOffset*2 };
+  if((!board->theBoard[move1.toSquare]) && (!(0x88 & (move1.toSquare)))) {
     //there is no piece in the way
     //and move is not out of the board
-    moveVector.push_back({ startSquare, startSquare+dirOffset });
+    if(move1.toSquare/16 == promotionRank) {
+      //we can promote
+      std::vector<Move> promMoves(4, move1);
+      promMoves[0].isPromoteB = true;
+      promMoves[1].isPromoteQ = true;
+      promMoves[2].isPromoteN = true;
+      promMoves[3].isPromoteR = true;
+      moveVector.insert(moveVector.end(), promMoves.begin(), promMoves.end());
+    } else {
+      moveVector.push_back(move1);
+    }
   }
-  if(startRank == currRank && (!board->theBoard[startSquare+dirOffset*2]) && (!board->theBoard[startSquare+dirOffset]) 
-    && (!(0x88 & (startSquare+dirOffset*2)))) {
+  if(startRank == currRank && (!board->theBoard[move2.toSquare]) && (!board->theBoard[move2.toSquare]) 
+    && (!(0x88 & (move2.toSquare)))) {
     //we are on start rank
     //there is no piece in the way
     //move is not out of board
-    moveVector.push_back({ startSquare, startSquare+dirOffset*2 });
+    moveVector.push_back(move2);
   }
 
   //capture moves
-  if((!(startSquare+dirOffset-1 & 0x88)) && board->theBoard[startSquare+dirOffset-1]) {
+  Move cap1 = { startSquare, startSquare+dirOffset-1 };
+  Move cap2 = { startSquare, startSquare+dirOffset+1 };
+  if((!(cap1.toSquare & 0x88)) && board->theBoard[cap1.toSquare]) {
     //we can capture to one side
-    if(isLegalCapture({ startSquare, startSquare+dirOffset-1 }, board)) {
-      moveVector.push_back({ startSquare, startSquare+dirOffset-1 });
+    if(isLegalCapture(cap1, board)) {
+      //we can promote
+      if(cap1.toSquare/16 == promotionRank) {
+        std::vector<Move> promMoves(4, cap1);
+        promMoves[0].isPromoteB = true;
+        promMoves[1].isPromoteQ = true;
+        promMoves[2].isPromoteN = true;
+        promMoves[3].isPromoteR = true;
+        moveVector.insert(moveVector.end(), promMoves.begin(), promMoves.end());
+      } else {
+        moveVector.push_back(cap1);
+      }
     }
   }
-  if((!(startSquare+dirOffset+1 & 0x88)) && board->theBoard[startSquare+dirOffset+1]) {
+  if((!(cap2.toSquare & 0x88)) && board->theBoard[cap2.toSquare]) {
     //we can capture to the other side
-    if(isLegalCapture({ startSquare, startSquare+dirOffset+1 }, board)) {
-      moveVector.push_back({ startSquare, startSquare+dirOffset+1 });
+    if(isLegalCapture(cap2, board)) {
+      if(cap2.toSquare == promotionRank) {
+        //we can promote
+        std::vector<Move> promMoves(4, cap2);
+        promMoves[0].isPromoteB = true;
+        promMoves[1].isPromoteQ = true;
+        promMoves[2].isPromoteN = true;
+        promMoves[3].isPromoteR = true;
+        moveVector.insert(moveVector.end(), promMoves.begin(), promMoves.end());
+      } else {
+        moveVector.push_back(cap2);
+      }
     }
   }
 }

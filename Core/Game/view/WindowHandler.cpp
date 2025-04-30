@@ -58,7 +58,7 @@ void WindowHandler::drawBoard(Board *board, Piece::Team bottomTeam) {
   }
 }
 
-Move WindowHandler::getMove(int squarePressed, Piece::Team humanTeam) {
+Move WindowHandler::getMove(int squarePressed, Piece::Team humanTeam, Board* board) {
   sf::Event event;
   Move move;
   move.fromSquare = squarePressed;
@@ -75,7 +75,52 @@ Move WindowHandler::getMove(int squarePressed, Piece::Team humanTeam) {
     move.fromSquare = ((7*16)+7)-move.fromSquare;
     move.toSquare = ((7*16)+7)-move.toSquare;
   }
+  int promotionRank = (board->sideToMove == Piece::WHITE) ? 7 : 0;
+  if(Piece::isType(board->theBoard[move.fromSquare], Piece::PAWN)) {
+    //we are moving a pawn
+    if(move.toSquare/16 == promotionRank) {
+      //we are promoting a pawn
+      Piece::PieceType type = getPromotionPiece();
+      switch(type) {
+        case Piece::ROOK:
+          move.isPromoteR = true;
+          break;
+        case Piece::QUEEN:
+          move.isPromoteQ = true;
+          break;
+        case Piece::KNIGHT:
+          move.isPromoteN = true;
+          break;
+        case Piece::BISHOP:
+          move.isPromoteB = true;
+          break;
+        default:
+          //shouldnt ever reach here
+          std::cout << "did not get correct promotion type" << std::endl;
+      }
+    }
+  }
   return move;
+}
+
+Piece::PieceType WindowHandler::getPromotionPiece() {
+  std::cout << "Please type 'q' for queen, 'n' for knight, 'b' for bisschop, 'r' for rook" << std::endl;
+  std::string piece;
+  getline(std::cin, piece);
+  if(piece[0] == 'q') {
+    return Piece::QUEEN;
+  }
+  if(piece[0] == 'r') {
+    return Piece::ROOK;
+  }
+  if(piece[0] == 'n') {
+    return Piece::KNIGHT;
+  }
+  if(piece[0] == 'b') {
+    return Piece::BISHOP;
+  }
+  std::cout << "invalid choice lil bro" << std::endl;
+  return getPromotionPiece();
 }
 
 int WindowHandler::whatSquare(int xCoord, int yCoord) {

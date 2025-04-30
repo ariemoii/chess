@@ -27,7 +27,7 @@ void MoveMaker::makeMove(Move move, Board* board) {
     board->theBoard[move.fromSquare+4] = 0;
     board->theBoard[move.fromSquare+1] = board->sideToMove | Piece::ROOK;
   }
-  if(move.isCastleKing || move.isCastleQueen) {
+  if(move.isCastleKing || move.isCastleQueen || move.isKingMove) {
     //revoke this colors castling rights
     if(board->sideToMove == Piece::WHITE) {
       board->whiteCastleRights = 0;
@@ -36,13 +36,24 @@ void MoveMaker::makeMove(Move move, Board* board) {
     }
   }
 
+  //handle promotion
+  if(move.isPromoteB) {
+    board->theBoard[move.toSquare] = board->sideToMove | Piece::BISHOP;
+  } else if(move.isPromoteN) {
+    board->theBoard[move.toSquare] = board->sideToMove | Piece::KNIGHT;
+  } else if(move.isPromoteQ) {
+    board->theBoard[move.toSquare] = board->sideToMove | Piece::QUEEN;
+  } else if(move.isPromoteR) {
+    board->theBoard[move.toSquare] = board->sideToMove | Piece::ROOK;
+  }
+
   //we need to change the side to move
   if(board->sideToMove == Piece::WHITE) {
     board->sideToMove = Piece::BLACK;
   } else {
     board->sideToMove = Piece::WHITE;
   }
-  
+
   return;
 }
 
@@ -61,9 +72,14 @@ void MoveMaker::tryMakeMove(Move move, Board* board) {
 bool MoveMaker::isLegalMove(Move *move, std::vector<Move> moveList) {
   for(auto i : moveList) {
     if(i == *move) {
+      i.isPromoteB = (*move).isPromoteB;
+      i.isPromoteN = (*move).isPromoteN;
+      i.isPromoteQ = (*move).isPromoteQ;
+      i.isPromoteR = (*move).isPromoteR;
       *move = i;
       return true;
     }
   }
   return false;
 }
+

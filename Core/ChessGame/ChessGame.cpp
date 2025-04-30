@@ -32,7 +32,7 @@ void ChessGame::runChess() {
         if(event.mouseButton.button == sf::Mouse::Left) {
           //left mouse button has been pressed
           int pressedSquare = windowHandler.whatSquare(event.mouseButton.x, event.mouseButton.y);
-          Move move = windowHandler.getMove(pressedSquare, board.getHumanTeam());
+          Move move = windowHandler.getMove(pressedSquare, board.getHumanTeam(), &board);
           moveMaker.tryMakeMove(move, &board);
         }
       }

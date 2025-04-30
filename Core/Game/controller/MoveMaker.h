@@ -17,6 +17,7 @@ class MoveMaker {
     MoveMaker();
     
     void makeMove(Move move, Board* board);
-    void tryMakeMove(Move move, Board* board);  
+    void tryMakeMove(Move move, Board* board); 
+     
 };
 

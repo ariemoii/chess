@@ -32,7 +32,7 @@ class WindowHandler {
     sf::RenderWindow window;
     void drawBoard(Board *board, Piece::Team bottomTeam);
     void drawBoardBackground();
-    Move getMove(int squarePressed, Piece::Team humanTeam);
+    Move getMove(int squarePressed, Piece::Team humanTeam, Board* board);
     int whatSquare(int xCoord, int yCoord);
 
   private:
@@ -40,7 +40,7 @@ class WindowHandler {
      * draw a square on the board
      */
     void drawSquare(bool isLightSquare, int xCoord, int yCoord);
-
+    Piece::PieceType getPromotionPiece();
     
 
 };
