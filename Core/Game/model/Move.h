@@ -12,7 +12,7 @@ struct Move {
   bool isPromoteR = false;
   bool isEnPassant = false;
   bool isKingMove = false;
-
+  bool pawnTwoSquares = false;
   
   bool operator==(const Move& m)  const {
     return fromSquare == m.fromSquare && toSquare == m.toSquare;

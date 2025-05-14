@@ -47,6 +47,9 @@ void MoveMaker::makeMove(Move move, Board* board) {
     board->theBoard[move.toSquare] = board->sideToMove | Piece::ROOK;
   }
 
+  handleEP(move, board);
+
+
   //we need to change the side to move
   if(board->sideToMove == Piece::WHITE) {
     board->sideToMove = Piece::BLACK;
@@ -55,6 +58,32 @@ void MoveMaker::makeMove(Move move, Board* board) {
   }
 
   return;
+}
+
+void MoveMaker::handleEP(Move move, Board* board) {
+  if(move.pawnTwoSquares) {
+    //we created en passant opportunity
+    int squareBehindPawn = (board->sideToMove == Piece::WHITE) ? move.toSquare-16 : move.toSquare+16;
+    if(board->sideToMove == Piece::WHITE) {
+      board->epSqBlack = squareBehindPawn;
+    } else {
+      board->epSqWhite = squareBehindPawn;
+    }
+  } else {
+    //if we've played en passant
+    if(move.isEnPassant) {
+      int sqBehindTarget = (board->sideToMove == Piece::WHITE) ? board->epSqWhite-16 : board->epSqBlack+16;
+      //take the pawn behind
+      board->theBoard[sqBehindTarget] = 0;
+    }
+
+    //remove target en passant square
+    if(board->sideToMove == Piece::WHITE) {
+      board->epSqWhite = -1;
+    } else {
+      board->epSqBlack = -1;
+    }
+  }
 }
 
 void MoveMaker::tryMakeMove(Move move, Board* board) {

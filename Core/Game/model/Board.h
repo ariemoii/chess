@@ -18,6 +18,9 @@ class Board {
     //least sig bit for kingside castling, second for queenside castling
     int blackCastleRights, whiteCastleRights;
 
+    //where the respective color can en passant to
+    int epSqWhite = -1, epSqBlack = -1;
+
   private:
     Piece::Team humanTeam;
     Board::TypeGame typeGame;

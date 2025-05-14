@@ -157,6 +157,7 @@ void MoveGenerator::generatePawnMoves(int startSquare, Board* board, std::vector
   int promotionRank = (sideToMove == Piece::WHITE) ? 7 : 0;
   int dirOffset = (sideToMove == Piece::WHITE) ? MoveData::N : MoveData::S;
   int currRank = startSquare >> 4;
+  
 
   //forward moves
   Move move1 = {startSquare, startSquare+dirOffset};
@@ -166,12 +167,7 @@ void MoveGenerator::generatePawnMoves(int startSquare, Board* board, std::vector
     //and move is not out of the board
     if(move1.toSquare/16 == promotionRank) {
       //we can promote
-      std::vector<Move> promMoves(4, move1);
-      promMoves[0].isPromoteB = true;
-      promMoves[1].isPromoteQ = true;
-      promMoves[2].isPromoteN = true;
-      promMoves[3].isPromoteR = true;
-      moveVector.insert(moveVector.end(), promMoves.begin(), promMoves.end());
+      generatePromotionMoves(moveVector, move1);
     } else {
       moveVector.push_back(move1);
     }
@@ -181,6 +177,7 @@ void MoveGenerator::generatePawnMoves(int startSquare, Board* board, std::vector
     //we are on start rank
     //there is no piece in the way
     //move is not out of board
+    move2.pawnTwoSquares = true;
     moveVector.push_back(move2);
   }
 
@@ -192,32 +189,46 @@ void MoveGenerator::generatePawnMoves(int startSquare, Board* board, std::vector
     if(isLegalCapture(cap1, board)) {
       //we can promote
       if(cap1.toSquare/16 == promotionRank) {
-        std::vector<Move> promMoves(4, cap1);
-        promMoves[0].isPromoteB = true;
-        promMoves[1].isPromoteQ = true;
-        promMoves[2].isPromoteN = true;
-        promMoves[3].isPromoteR = true;
-        moveVector.insert(moveVector.end(), promMoves.begin(), promMoves.end());
+        generatePromotionMoves(moveVector, cap1);
       } else {
         moveVector.push_back(cap1);
       }
     }
+  } else if(!(cap1.toSquare & 0x88)) {
+    //check for en passant opportunity
+    int epTargetSq = (board->sideToMove == Piece::WHITE) ? board->epSqWhite : board->epSqBlack;
+    if(cap1.toSquare == epTargetSq) {
+      cap1.isEnPassant = true;
+      moveVector.push_back(cap1);
+    }
   }
+
   if((!(cap2.toSquare & 0x88)) && board->theBoard[cap2.toSquare]) {
     //we can capture to the other side
     if(isLegalCapture(cap2, board)) {
       if(cap2.toSquare == promotionRank) {
         //we can promote
-        std::vector<Move> promMoves(4, cap2);
-        promMoves[0].isPromoteB = true;
-        promMoves[1].isPromoteQ = true;
-        promMoves[2].isPromoteN = true;
-        promMoves[3].isPromoteR = true;
-        moveVector.insert(moveVector.end(), promMoves.begin(), promMoves.end());
+        generatePromotionMoves(moveVector, cap2);
       } else {
         moveVector.push_back(cap2);
       }
     }
+  } else if(!(cap1.toSquare & 0x88)) {
+    //check for en passant opportunity
+    int epTargetSq = (board->sideToMove == Piece::WHITE) ? board->epSqWhite : board->epSqBlack;
+    if(cap2.toSquare == epTargetSq) {
+      cap2.isEnPassant = true;
+      moveVector.push_back(cap2);
+    }
   }
+}
+
+void MoveGenerator::generatePromotionMoves(std::vector<Move>& moveVector, Move move) {
+  std::vector<Move> promMoves(4, move);
+  promMoves[0].isPromoteB = true;
+  promMoves[1].isPromoteQ = true;
+  promMoves[2].isPromoteN = true;
+  promMoves[3].isPromoteR = true;
+  moveVector.insert(moveVector.end(), promMoves.begin(), promMoves.end());
 }
 
