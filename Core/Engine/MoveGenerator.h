@@ -22,5 +22,4 @@ class MoveGenerator {
     void generatePawnMoves(int startSquare, Board* board, std::vector<Move>& moveVector);
     void generatePromotionMoves(std::vector<Move>& moveVector, Move move);
     bool isLegalCapture(Move move, Board* board);
-
 };

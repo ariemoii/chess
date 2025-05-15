@@ -5,14 +5,19 @@
 class MoveData {
   public:
     enum Direction { N=16, E=1, S=-16, W=-1, NE=17, SE=-15, SW=-17, NW=15 };
+    enum AttackPieceType { AKING = 0b1, AQUEEN = 0b10, AROOK = 0b100, ABISHOP = 0b1000, AKNIGHT = 0b10000, AWPAWN = 0b100000, ABPAWN = 0b1000000};
 
     MoveData();
 
-  public:
-    std::array<int, 256> attackArray;
+    //used for debugging
+    void printAttackArray();
 
-    //store the squares a piece can move to
-    //so a rook can move 1..8 to the north, so store 1*N, 2*N, etc.
+    bool canAttack(AttackPieceType type, int fromSquare, int toSquare);
+
+  public:
+
+    //store the direction squares a piece can move to
+
 
     std::array<int, 64> bishopMoves;
     std::array<int, 64> rookMoves;
@@ -22,8 +27,14 @@ class MoveData {
     std::array<int, 64> blackPawnMoves;
     std::array<int, 64> whitePawnMoves;
 
+  private:
+    //attack array from 
+    //https://web.archive.org/web/20071027053053/http://www.brucemo.com/compchess/programming/0x88.htm,
+    std::array<int, 265> attackArray{};
+
 
   private:
     void preComputeMoveData();
-
+    void preComputeAttackArray();
+    void preComputeAttackSlidingPiece(std::array<int, 64> slidingPieceArray, AttackPieceType type);
 };

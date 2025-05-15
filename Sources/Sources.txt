@@ -1,3 +1,4 @@
 SFML
-
+https://github.com/vinc/purplehaze/blob/master/src/board.cpp
+https://web.archive.org/web/20071027053053/http://www.brucemo.com/compchess/programming/0x88.htm
 
