@@ -72,8 +72,6 @@ void FENparser::extractBoardState(std::vector<std::string> words, Board* board) 
 
   //extract castling rights
   std::string castlingRights = words[2];
-  board->blackCastleRights = 0;
-  board->whiteCastleRights = 0;
   int rights = 0;
   if(castlingRights[0] == '-') {
     //neither side may castle
@@ -81,19 +79,15 @@ void FENparser::extractBoardState(std::vector<std::string> words, Board* board) 
     for(auto &right : castlingRights) {
       if(right == 'Q') {
         rights |= 0b10;
-        board->whiteCastleRights |= 0b10;
       }
       if(right == 'K') {
         rights |= 0b1;
-        board->whiteCastleRights |= 0b01;
       }
       if(right == 'q') {
         rights |= 0b1000;
-        board->blackCastleRights |= 0b10;
       }
       if(right == 'k') {
         rights |= 0b100;
-        board->blackCastleRights |= 0b01;
       }
     }
     GameState::setCastlingRights(rights, board->gameState);

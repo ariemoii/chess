@@ -7,7 +7,7 @@
 MoveData::MoveData() {
   preComputeMoveData();
   preComputeAttackArray();
-  printAttackArray();
+  //printAttackArray();
   
 }
 

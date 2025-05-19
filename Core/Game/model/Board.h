@@ -18,20 +18,16 @@ class Board {
     Piece::Team sideToMove;
 
     //least sig bit for kingside castling, second for queenside castling
-    int blackCastleRights, whiteCastleRights;
-
     //where the respective color can en passant to
-    int epSqWhite = -1, epSqBlack = -1;
-
     //half-move clock
     int currentPly = 0;
 
     //array for holding immutable game-states
     //(castling, EPsquares, promotions etc.)
     //for the bit layout, see GameState.h and GameState.cpp
-    std::array<int, 1024> boardStates;
+    std::array<unsigned int, 1024> boardStates;
 
-    int gameState = 0;
+    unsigned int gameState = 0;
 
 
   private:

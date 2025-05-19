@@ -113,7 +113,6 @@ void PseudoLegalMoveGenerator::generateKingMoves(int startSquare, Board* board, 
     Move moveNormal;
     moveNormal.fromSquare = startSquare;
     moveNormal.toSquare = startSquare+i;
-    moveNormal.isFirstKingMove = true;
     if(moveNormal.toSquare & 0x88) {
       //move is outside of the board
       continue;
@@ -134,7 +133,8 @@ void PseudoLegalMoveGenerator::generateKingMoves(int startSquare, Board* board, 
       if(!board->theBoard[startSquare-1] && !board->theBoard[startSquare-2]) {
         //there are no pieces in the way
         Move moveCastling = { startSquare, startSquare-2 };
-        moveCastling.isCastleKing = true;
+        //moveCastling.isCastleKing = true;
+        moveCastling.setCastleKingMove();
         moveVector.push_back(moveCastling);
       }
     }
@@ -143,7 +143,8 @@ void PseudoLegalMoveGenerator::generateKingMoves(int startSquare, Board* board, 
       if(!board->theBoard[startSquare+1] && !board->theBoard[startSquare+2]) {
         //there are no pieces in the way
         Move move = { startSquare, startSquare+2 };
-        move.isCastleQueen = true;
+        //move.isCastleQueen = true;
+        move.setCastleQueenMove();
         moveVector.push_back(move);
       }
     }

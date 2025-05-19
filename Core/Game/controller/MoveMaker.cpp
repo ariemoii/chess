@@ -11,12 +11,16 @@ moveGenerator(MoveGenerator()){
 
 void MoveMaker::makeMove(Move move, Board* board) {
   int piece = board->theBoard[move.fromSquare];
+  int capturedPiece = board->theBoard[move.toSquare];
   if(piece == 0) {
     //no piece here
     return;
   }
   board->theBoard[move.fromSquare] = 0;
   board->theBoard[move.toSquare] = piece;
+
+  //remember captured piece for unmake move
+  GameState::setCapturedPiece(capturedPiece, board->gameState);
 
   handleCastling(move, board);
 
@@ -120,21 +124,13 @@ void MoveMaker::handlePromotion(Move move, Board* board) {
 
 void MoveMaker::handleCastling(Move move, Board* board) {
   //handle castling moves
-  if(move.isCastleKing) {
+  if(move.isCastleKingMove()) {
     board->theBoard[move.fromSquare-3] = 0;
     board->theBoard[move.fromSquare-1] = board->sideToMove | Piece::ROOK;
   }
-  if(move.isCastleQueen) {
+  if(move.isCastleQueenMove()) {
     board->theBoard[move.fromSquare+4] = 0;
     board->theBoard[move.fromSquare+1] = board->sideToMove | Piece::ROOK;
-  }
-  if(move.isCastleKing || move.isCastleQueen || move.isFirstKingMove) {
-    //revoke this colors castling rights
-    if(board->sideToMove == Piece::WHITE) {
-      board->whiteCastleRights = 0;
-    } else {
-      board->blackCastleRights = 0;
-    }
   }
 }
 
@@ -191,29 +187,5 @@ bool MoveMaker::isLegalMove(Move *move, std::vector<Move> moveList) {
 }
 
 void MoveMaker::unmakeMove(Move move, Board* board) {
-  //update half-move clock
-  board->currentPly--;
-
-  //change the side to move back
-  if(board->sideToMove == Piece::WHITE) {
-    board->sideToMove = Piece::BLACK;
-  } else {
-    board->sideToMove = Piece::WHITE;
-  }
-
-  int piece = board->theBoard[move.toSquare];
-  board->theBoard[move.toSquare] = 0;
-  board->theBoard[move.fromSquare] = piece;
-  
-  //undo castling
-  if(move.isCastleKing) {
-    board->theBoard[move.fromSquare-3] = board->sideToMove | Piece::ROOK;
-    board->theBoard[move.fromSquare-1] = 0;
-  }
-  if(move.isCastleQueen) {
-    board->theBoard[move.fromSquare+4] = board->sideToMove | Piece::ROOK;
-    board->theBoard[move.fromSquare+1] = 0;
-  }
-
 
 } 
