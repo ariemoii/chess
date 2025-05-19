@@ -3,11 +3,6 @@
 struct Move {
   int fromSquare;
   int toSquare;
-
-  bool isPromoteQ = false;
-  bool isPromoteB = false;
-  bool isPromoteN = false;
-  bool isPromoteR = false;
   bool isEnPassant = false;
   bool pawnTwoSquares = false;
 
@@ -40,6 +35,7 @@ struct Move {
   bool isPromoteKnightMove() const { return flags & 0b100000; }
   bool isEnPassantMove() const { return flags & 0b1000000; }
   bool isPawnTwoSquaresForwardMove() const { return flags & 0b10000000; }
+  int getPromotionFlags() const { return flags & 0b111100; }
 
   
   bool operator==(const Move& m)  const {

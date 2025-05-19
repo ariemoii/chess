@@ -226,10 +226,10 @@ void PseudoLegalMoveGenerator::generatePawnMoves(int startSquare, Board* board, 
 
 void PseudoLegalMoveGenerator::generatePromotionMoves(std::vector<Move>& moveVector, Move move) {
   std::vector<Move> promMoves(4, move);
-  promMoves[0].isPromoteB = true;
-  promMoves[1].isPromoteQ = true;
-  promMoves[2].isPromoteN = true;
-  promMoves[3].isPromoteR = true;
+  promMoves[0].setPromoteBishop();
+  promMoves[1].setPromoteQueen();
+  promMoves[2].setPromoteKnight();
+  promMoves[3].setPromoteRook();
   moveVector.insert(moveVector.end(), promMoves.begin(), promMoves.end());
 }
 

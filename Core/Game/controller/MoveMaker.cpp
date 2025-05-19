@@ -111,13 +111,13 @@ void MoveMaker::updateCastlingRights(Move move, Board* board) {
 
 void MoveMaker::handlePromotion(Move move, Board* board) {
   //handle promotion
-  if(move.isPromoteB) {
+  if(move.isPromoteBishopMove()) {
     board->theBoard[move.toSquare] = board->sideToMove | Piece::BISHOP;
-  } else if(move.isPromoteN) {
+  } else if(move.isPromoteKnightMove()) {
     board->theBoard[move.toSquare] = board->sideToMove | Piece::KNIGHT;
-  } else if(move.isPromoteQ) {
+  } else if(move.isPromoteQueenMove()) {
     board->theBoard[move.toSquare] = board->sideToMove | Piece::QUEEN;
-  } else if(move.isPromoteR) {
+  } else if(move.isPromoteRookMove()) {
     board->theBoard[move.toSquare] = board->sideToMove | Piece::ROOK;
   }
 }
@@ -175,10 +175,7 @@ void MoveMaker::tryMakeMove(Move move, Board* board) {
 bool MoveMaker::isLegalMove(Move *move, std::vector<Move> moveList) {
   for(auto i : moveList) {
     if(i == *move) {
-      i.isPromoteB = (*move).isPromoteB;
-      i.isPromoteN = (*move).isPromoteN;
-      i.isPromoteQ = (*move).isPromoteQ;
-      i.isPromoteR = (*move).isPromoteR;
+      i.flags = move->flags;
       *move = i;
       return true;
     }

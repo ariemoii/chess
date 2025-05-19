@@ -83,16 +83,16 @@ Move WindowHandler::getMove(int squarePressed, Piece::Team humanTeam, Board* boa
       Piece::PieceType type = getPromotionPiece();
       switch(type) {
         case Piece::ROOK:
-          move.isPromoteR = true;
+          move.setPromoteRook();
           break;
         case Piece::QUEEN:
-          move.isPromoteQ = true;
+          move.setPromoteQueen();
           break;
         case Piece::KNIGHT:
-          move.isPromoteN = true;
+          move.setPromoteKnight();
           break;
         case Piece::BISHOP:
-          move.isPromoteB = true;
+          move.setPromoteBishop();
           break;
         default:
           //shouldnt ever reach here
