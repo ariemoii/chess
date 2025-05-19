@@ -14,7 +14,7 @@ void ChessGame::runChess() {
   std::string fen = parser.requestFEN();
   Board board;
   board.askTeam();
-  parser.parseFenOnBoard(fen, &board);
+  parser.parseFen(fen, &board);
   board.printBoard();
   WindowHandler windowHandler(SCREEN_WIDTH, SCREEN_HEIGHT);
   MoveMaker moveMaker;

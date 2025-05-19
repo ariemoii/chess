@@ -19,5 +19,6 @@ class MoveMaker {
     void makeMove(Move move, Board* board);
     void tryMakeMove(Move move, Board* board); 
     void handleEP(Move move, Board* board);
+    void unmakeMove(Move move, Board* board);
 };
 

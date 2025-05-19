@@ -1,6 +1,5 @@
 #include "FENparser.h"
 #include <iostream>
-#include <vector>
 #include <sstream>
 
 
@@ -31,7 +30,7 @@ Piece::PieceType FENparser::pieceTypeFromSymbol(char i) {
  * help on splitting a string: https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-chttps://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
  */
 //this function assumes it is getting a legal fen string
-void FENparser::parseFenOnBoard(std::string fen, Board *board) {
+void FENparser::parseFen(std::string fen, Board *board) {
   std::istringstream iss(fen);
   std::vector<std::string> words;
   std::string word;
@@ -57,6 +56,10 @@ void FENparser::parseFenOnBoard(std::string fen, Board *board) {
       }
     }
   }
+  extractBoardState(words, board);
+}
+
+void FENparser::extractBoardState(std::vector<std::string> words, Board* board) {
   //extract side to move
   std::string sideToMove = words[1];
   if(sideToMove == "w") {
@@ -65,27 +68,35 @@ void FENparser::parseFenOnBoard(std::string fen, Board *board) {
     board->sideToMove = Piece::BLACK;
   }
 
+
+
   //extract castling rights
   std::string castlingRights = words[2];
   board->blackCastleRights = 0;
   board->whiteCastleRights = 0;
+  int rights = 0;
   if(castlingRights[0] == '-') {
     //neither side may castle
   } else {
     for(auto &right : castlingRights) {
       if(right == 'Q') {
+        rights |= 0b10;
         board->whiteCastleRights |= 0b10;
       }
       if(right == 'K') {
+        rights |= 0b1;
         board->whiteCastleRights |= 0b01;
       }
       if(right == 'q') {
+        rights |= 0b1000;
         board->blackCastleRights |= 0b10;
       }
       if(right == 'k') {
+        rights |= 0b100;
         board->blackCastleRights |= 0b01;
       }
     }
+    GameState::setCastlingRights(rights, board->gameState);
   }
 }
 

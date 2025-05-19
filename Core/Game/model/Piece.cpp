@@ -1,7 +1,5 @@
 #include "Piece.h"
 
-Piece::Piece(){};
-
 bool Piece::isType(int piece, Piece::PieceType type) {
   int pieceType = piece & 0b111;
   return pieceType == type;

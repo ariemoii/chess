@@ -11,7 +11,7 @@ struct Move {
   bool isPromoteN = false;
   bool isPromoteR = false;
   bool isEnPassant = false;
-  bool isKingMove = false;
+  bool isFirstKingMove = false;
   bool pawnTwoSquares = false;
   
   bool operator==(const Move& m)  const {

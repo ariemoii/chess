@@ -27,7 +27,7 @@ void MoveMaker::makeMove(Move move, Board* board) {
     board->theBoard[move.fromSquare+4] = 0;
     board->theBoard[move.fromSquare+1] = board->sideToMove | Piece::ROOK;
   }
-  if(move.isCastleKing || move.isCastleQueen || move.isKingMove) {
+  if(move.isCastleKing || move.isCastleQueen || move.isFirstKingMove) {
     //revoke this colors castling rights
     if(board->sideToMove == Piece::WHITE) {
       board->whiteCastleRights = 0;
@@ -57,6 +57,9 @@ void MoveMaker::makeMove(Move move, Board* board) {
     board->sideToMove = Piece::WHITE;
   }
 
+  //update half-move clock
+  board->currentPly++;
+
   return;
 }
 
@@ -65,30 +68,30 @@ void MoveMaker::handleEP(Move move, Board* board) {
     //we created en passant opportunity
     int squareBehindPawn = (board->sideToMove == Piece::WHITE) ? move.toSquare-16 : move.toSquare+16;
     if(board->sideToMove == Piece::WHITE) {
-      board->epSqBlack = squareBehindPawn;
+      GameState::setEPSquareBlack(squareBehindPawn, board->gameState);
     } else {
-      board->epSqWhite = squareBehindPawn;
+      GameState::setEPSquareWhite(squareBehindPawn, board->gameState);
     }
   } else {
     //if we've played en passant
     if(move.isEnPassant) {
-      int sqBehindTarget = (board->sideToMove == Piece::WHITE) ? board->epSqWhite-16 : board->epSqBlack+16;
+      int sqBehindTarget = (board->sideToMove == Piece::WHITE) ? GameState::getEPSquareWhite(board->gameState)-16 : GameState::getEPSquareBlack(board->gameState)+16;
       //take the pawn behind
       board->theBoard[sqBehindTarget] = 0;
     }
 
     //remove target en passant square
     if(board->sideToMove == Piece::WHITE) {
-      board->epSqWhite = -1;
+      GameState::setEPSquareWhite(0b100000000, board->gameState);
     } else {
-      board->epSqBlack = -1;
+      GameState::setEPSquareBlack(0b100000000, board->gameState);
     }
   }
 }
 
 void MoveMaker::tryMakeMove(Move move, Board* board) {
   int piece = board->theBoard[move.fromSquare];
-  std::vector<Move> pseudoLegalMoves = moveGenerator.generatePseudolegalMoves(board);
+  std::vector<Move> pseudoLegalMoves = moveGenerator.generateLegalMoves(board);
   if(isLegalMove(&move, pseudoLegalMoves)) {
     std::cout << "move is legal " << std::endl;
     makeMove(move, board);
@@ -112,3 +115,30 @@ bool MoveMaker::isLegalMove(Move *move, std::vector<Move> moveList) {
   return false;
 }
 
+void MoveMaker::unmakeMove(Move move, Board* board) {
+  //update half-move clock
+  board->currentPly--;
+
+  //change the side to move back
+  if(board->sideToMove == Piece::WHITE) {
+    board->sideToMove = Piece::BLACK;
+  } else {
+    board->sideToMove = Piece::WHITE;
+  }
+
+  int piece = board->theBoard[move.toSquare];
+  board->theBoard[move.toSquare] = 0;
+  board->theBoard[move.fromSquare] = piece;
+  
+  //undo castling
+  if(move.isCastleKing) {
+    board->theBoard[move.fromSquare-3] = board->sideToMove | Piece::ROOK;
+    board->theBoard[move.fromSquare-1] = 0;
+  }
+  if(move.isCastleQueen) {
+    board->theBoard[move.fromSquare+4] = board->sideToMove | Piece::ROOK;
+    board->theBoard[move.fromSquare+1] = 0;
+  }
+
+
+} 

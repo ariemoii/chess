@@ -1,25 +1,25 @@
 #pragma once
 
-#include "model/Move.h"
-#include "model/Board.h"
-#include "MoveData.h"
+#include "PseudoLegalMoveGenerator.h"
 #include <vector>
+
 
 class MoveGenerator {
   public:
+    
+
+    MoveGenerator();
 
   private:
+    PseudoLegalMoveGenerator pseudoLegalMoveGenerator;
     MoveData moveData;
+    bool resultsInCheck(Board* board);
 
   public:
-    MoveGenerator();
-    std::vector<Move> generatePseudolegalMoves(Board* board);
+    std::vector<Move> generateLegalMoves(Board* board);
+
 
   private:
-    void generateSlidingPieceMoves(int startSquare, Piece::PieceType type, Board* board, std::vector<Move>& moveVector);
-    void generateKnightMoves(int startSquare, Board* board, std::vector<Move>& moveVector);
-    void generateKingMoves(int startSquare, Board* board, std::vector<Move>& moveVector);
-    void generatePawnMoves(int startSquare, Board* board, std::vector<Move>& moveVector);
-    void generatePromotionMoves(std::vector<Move>& moveVector, Move move);
-    bool isLegalCapture(Move move, Board* board);
+
+
 };

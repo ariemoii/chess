@@ -8,7 +8,7 @@ class Piece {
     enum Team { NONE = 0, BLACK = 16, WHITE = 8};
 
   public:
-    Piece();
+    Piece() = delete;
     static PieceType getType(int piece);
     static Team getTeam(int piece);
     static bool isType(int piece, PieceType pieceType);

@@ -1,6 +1,8 @@
 #pragma once
 #include "model/Piece.h"
+#include "model/GameState.h"
 #include <iostream>
+#include <array>
 
 /**
  * I am using the 0x88 board representation. Reference:
@@ -20,6 +22,17 @@ class Board {
 
     //where the respective color can en passant to
     int epSqWhite = -1, epSqBlack = -1;
+
+    //half-move clock
+    int currentPly = 0;
+
+    //array for holding immutable game-states
+    //(castling, EPsquares, promotions etc.)
+    //for the bit layout, see GameState.h and GameState.cpp
+    std::array<int, 1024> boardStates;
+
+    int gameState = 0;
+
 
   private:
     Piece::Team humanTeam;
