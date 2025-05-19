@@ -20,5 +20,8 @@ class MoveMaker {
     void tryMakeMove(Move move, Board* board); 
     void handleEP(Move move, Board* board);
     void unmakeMove(Move move, Board* board);
+    void handleCastling(Move move, Board* board);
+    void handlePromotion(Move move, Board* board);
+    void updateCastlingRights(Move move, Board* board);
 };
 

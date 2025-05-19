@@ -18,6 +18,107 @@ void MoveMaker::makeMove(Move move, Board* board) {
   board->theBoard[move.fromSquare] = 0;
   board->theBoard[move.toSquare] = piece;
 
+  handleCastling(move, board);
+
+  updateCastlingRights(move, board);
+
+  handlePromotion(move, board);
+
+  handleEP(move, board);
+
+
+  //we need to change the side to move
+  if(board->sideToMove == Piece::WHITE) {
+    board->sideToMove = Piece::BLACK;
+  } else {
+    board->sideToMove = Piece::WHITE;
+  }
+
+  //update half-move clock
+  board->currentPly++;
+
+  return;
+}
+
+void MoveMaker::updateCastlingRights(Move move, Board* board) {
+  int rights = GameState::getCastlingRights(board->gameState);
+  int kingStartSq = (board->sideToMove == Piece::WHITE) ? 3 : 115;
+  int kingSideRookSq = (board->sideToMove == Piece::WHITE) ? 0 : 112;
+  int queenSideRookSq = (board->sideToMove == Piece::WHITE) ? 7 : 119;
+
+  //we moved the king
+  if(move.fromSquare == kingStartSq) {
+    if(board->sideToMove == Piece::WHITE) {
+      rights &= 0b1100;
+      GameState::setCastlingRights(rights, board->gameState);
+    } else {
+      rights &= 0b0011;
+      GameState::setCastlingRights(rights, board->gameState);
+    }
+  }
+
+  //we moved kingside rook
+  if(move.fromSquare == kingSideRookSq) {
+    if(board->sideToMove == Piece::WHITE) {
+      rights &= 0b1110;
+      GameState::setCastlingRights(rights, board->gameState);
+    } else {
+      rights &= 0b1011;
+      GameState::setCastlingRights(rights, board->gameState);
+    }
+  }
+
+  //we moved queenside rook
+  if(move.fromSquare == queenSideRookSq) {
+    if(board->sideToMove == Piece::WHITE) {
+      rights &= 0b1101;
+      GameState::setCastlingRights(rights, board->gameState);
+    } else {
+      rights &= 0b0111;
+      GameState::setCastlingRights(rights, board->gameState);
+    }
+  }
+
+  kingSideRookSq = (board->sideToMove == Piece::WHITE) ? 112 : 0;
+  queenSideRookSq = (board->sideToMove == Piece::WHITE) ? 119 : 7;
+
+  //we've taken kingside rook: update rights accordingly
+  if(move.toSquare == kingSideRookSq) {
+    if(board->sideToMove == Piece::WHITE) {
+      rights &= 0b1011;
+      GameState::setCastlingRights(rights, board->gameState);
+    } else {
+      rights &= 0b1110;
+      GameState::setCastlingRights(rights, board->gameState);
+    }
+  }
+
+  //we've taken queenside rook: update rights accordingly
+  if(move.toSquare == queenSideRookSq) {
+    if(board->sideToMove == Piece::WHITE) {
+      rights &= 0b0111;
+      GameState::setCastlingRights(rights, board->gameState);
+    } else {
+      rights &= 0b1101;
+      GameState::setCastlingRights(rights, board->gameState);
+    }
+  }
+}
+
+void MoveMaker::handlePromotion(Move move, Board* board) {
+  //handle promotion
+  if(move.isPromoteB) {
+    board->theBoard[move.toSquare] = board->sideToMove | Piece::BISHOP;
+  } else if(move.isPromoteN) {
+    board->theBoard[move.toSquare] = board->sideToMove | Piece::KNIGHT;
+  } else if(move.isPromoteQ) {
+    board->theBoard[move.toSquare] = board->sideToMove | Piece::QUEEN;
+  } else if(move.isPromoteR) {
+    board->theBoard[move.toSquare] = board->sideToMove | Piece::ROOK;
+  }
+}
+
+void MoveMaker::handleCastling(Move move, Board* board) {
   //handle castling moves
   if(move.isCastleKing) {
     board->theBoard[move.fromSquare-3] = 0;
@@ -35,32 +136,6 @@ void MoveMaker::makeMove(Move move, Board* board) {
       board->blackCastleRights = 0;
     }
   }
-
-  //handle promotion
-  if(move.isPromoteB) {
-    board->theBoard[move.toSquare] = board->sideToMove | Piece::BISHOP;
-  } else if(move.isPromoteN) {
-    board->theBoard[move.toSquare] = board->sideToMove | Piece::KNIGHT;
-  } else if(move.isPromoteQ) {
-    board->theBoard[move.toSquare] = board->sideToMove | Piece::QUEEN;
-  } else if(move.isPromoteR) {
-    board->theBoard[move.toSquare] = board->sideToMove | Piece::ROOK;
-  }
-
-  handleEP(move, board);
-
-
-  //we need to change the side to move
-  if(board->sideToMove == Piece::WHITE) {
-    board->sideToMove = Piece::BLACK;
-  } else {
-    board->sideToMove = Piece::WHITE;
-  }
-
-  //update half-move clock
-  board->currentPly++;
-
-  return;
 }
 
 void MoveMaker::handleEP(Move move, Board* board) {
