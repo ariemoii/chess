@@ -7,11 +7,11 @@ class GameState {
     GameState() = delete;
 
   private:
-    static const unsigned int castlingMask =      0b1111111111111111111111111110000;
-    static const unsigned int EPSquareWhiteMask = 0b1111111111111000000000111111111;
-    static const unsigned int EPSquareBlackMask = 0b1111000000000111111111111111111;
-    static const unsigned int capturedPieceMask = 0b1111111111111111111111000001111;
-    static const unsigned int promotionMoveMask = 0b0000111111111111111111111111111;
+    static constexpr unsigned int castlingMask =      0b1111111111111111111111111110000;
+    static constexpr unsigned int EPSquareWhiteMask = 0b1111111111111000000000111111111;
+    static constexpr unsigned int EPSquareBlackMask = 0b1111000000000111111111111111111;
+    static constexpr unsigned int capturedPieceMask = 0b1111111111111111111111000001111;
+    static constexpr unsigned int promotionMoveMask = 0b0000111111111111111111111111111;
 
 
   public:

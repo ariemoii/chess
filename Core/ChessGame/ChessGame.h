@@ -3,6 +3,7 @@
 #include "controller/FENparser.h"
 #include "model/Board.h"
 #include "controller/MoveMaker.h"
+#include "MoveGenerator.h"
 
 class ChessGame {
   

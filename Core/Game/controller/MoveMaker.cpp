@@ -1,10 +1,8 @@
 #include "MoveMaker.h"
-
-//delete iostream at some point
 #include <iostream>
 
-MoveMaker::MoveMaker() : 
-moveGenerator(MoveGenerator()){
+MoveMaker::MoveMaker() 
+{
   
 };
 
@@ -21,6 +19,10 @@ void MoveMaker::makeMove(Move move, Board* board) {
 
   //remember captured piece for unmake move
   GameState::setCapturedPiece(capturedPiece, board->gameState);
+  
+  //store the current board state and move
+  board->boardStates[board->currentPly].gameState = board->gameState;
+  board->boardStates[board->currentPly].playedMove = move;
 
   handleCastling(move, board);
 
@@ -32,11 +34,7 @@ void MoveMaker::makeMove(Move move, Board* board) {
 
 
   //we need to change the side to move
-  if(board->sideToMove == Piece::WHITE) {
-    board->sideToMove = Piece::BLACK;
-  } else {
-    board->sideToMove = Piece::WHITE;
-  }
+  board->switchSideToMove();
 
   //update half-move clock
   board->currentPly++;
@@ -135,7 +133,6 @@ void MoveMaker::handleCastling(Move move, Board* board) {
 }
 
 void MoveMaker::handleEP(Move move, Board* board) {
-  std::cout << "falgs = " << move.flags << std::endl;
   if(move.isPawnTwoSquaresForwardMove()) {
     //we created en passant opportunity
     int squareBehindPawn = (board->sideToMove == Piece::WHITE) ? move.toSquare-16 : move.toSquare+16;
@@ -161,31 +158,48 @@ void MoveMaker::handleEP(Move move, Board* board) {
   }
 }
 
-void MoveMaker::tryMakeMove(Move move, Board* board) {
-  int piece = board->theBoard[move.fromSquare];
-  std::vector<Move> pseudoLegalMoves = moveGenerator.generateLegalMoves(board);
-  if(isLegalMove(&move, pseudoLegalMoves)) {
-    std::cout << "move is legal " << std::endl;
-    makeMove(move, board);
-  } else {
-    std::cout << "move is NOT legal " << std::endl;
+void MoveMaker::unmakeLastMove(Board* board) {
+  if(!board->currentPly) {
+    //we cannot unmake move
+    std::cout << "tried to unmake move when none have been played\n";
+    return;
   }
-  std::cout << "square " << move.fromSquare << std::endl;
-}
 
-bool MoveMaker::isLegalMove(Move *move, std::vector<Move> moveList) {
-  for(auto i : moveList) {
-    if(i == *move) {
-      std::cout << "moveflags = " << move->flags << std::endl;
-      i.setPromotionFlags(move->getPromotionFlags());
-      std::cout <<"flags here" << i.flags << std::endl;
-      *move = i;
-      return true;
-    }
+  //decrement ply count
+  (board->currentPly)--;
+
+  //reset move turn
+  board->switchSideToMove();
+
+  //restore game state
+  board->gameState = board->boardStates[board->currentPly].gameState;
+
+  Move lastMove = board->boardStates[board->currentPly].playedMove;
+  int gameStateThen = board->boardStates[board->currentPly].gameState;
+  //unplay last move
+  board->theBoard[lastMove.fromSquare] = board->theBoard[lastMove.toSquare];
+  board->theBoard[lastMove.toSquare] = GameState::getCapturedPiece(gameStateThen);
+
+  //if we promoted, place pawn back
+  if(lastMove.getPromotionFlags()) {
+    board->theBoard[lastMove.fromSquare] = Piece::PAWN | board->sideToMove;
   }
-  return false;
-}
 
-void MoveMaker::unmakeMove(Move move, Board* board) {
+  //if we played en passant, place pawn back
+  if(lastMove.isEnPassantMove()) {
+    int squarePawnBack = (board->sideToMove == Piece::WHITE) 
+    ? GameState::getEPSquareWhite(gameStateThen)-16 : GameState::getEPSquareBlack(gameStateThen)+16;
+    int pawn = (board->sideToMove == Piece::WHITE) ? Piece::PAWN | Piece::BLACK : Piece::PAWN | Piece::WHITE;
+    board->theBoard[squarePawnBack] = pawn;
+  }
 
+  if(lastMove.isCastleKingMove()) {
+    board->theBoard[lastMove.fromSquare-3] = board->sideToMove | Piece::ROOK;
+    board->theBoard[lastMove.fromSquare-1] = 0;
+  }
+
+  if(lastMove.isCastleQueenMove()) {
+    board->theBoard[lastMove.fromSquare+4] = board->sideToMove | Piece::ROOK;
+    board->theBoard[lastMove.fromSquare+1] = 0;
+  }
 } 

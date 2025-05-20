@@ -1,6 +1,8 @@
 #pragma once
 
 #include "PseudoLegalMoveGenerator.h"
+#include "controller/MoveMaker.h"
+#include "model/Board.h"
 #include <vector>
 
 
@@ -13,11 +15,11 @@ class MoveGenerator {
   private:
     PseudoLegalMoveGenerator pseudoLegalMoveGenerator;
     MoveData moveData;
-    bool resultsInCheck(Board* board);
+    MoveMaker moveMaker;
 
   public:
     std::vector<Move> generateLegalMoves(Board* board);
-
+    bool isCheckMate(Board* board);
 
   private:
 

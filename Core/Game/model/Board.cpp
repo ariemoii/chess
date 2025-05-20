@@ -58,3 +58,16 @@ void Board::askTypeGame() {
     humanTeam = Piece::WHITE;
   }
 }
+
+void Board::switchSideToMove() {
+  if(sideToMove == Piece::WHITE) {
+    sideToMove = Piece::BLACK;
+  } else {
+    sideToMove = Piece::WHITE;
+  }
+}
+
+// bool Board::isMate() {
+//   bool isMate = false;
+//   std::vector<Move> legalMoves = moveGenerator.generateLegalMoves(this);
+// }

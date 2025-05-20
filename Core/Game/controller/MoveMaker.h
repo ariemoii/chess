@@ -1,27 +1,24 @@
 #pragma once
 #include "model/Move.h"
 #include "model/Board.h"
-#include "MoveGenerator.h"
 
 class MoveMaker {
 
 
   private:
-    MoveGenerator moveGenerator;
+
   public:
 
   private:
-    bool isLegalMove(Move *move, std::vector<Move> legalMoveList);
+    void handleEP(Move move, Board* board);
+    void handleCastling(Move move, Board* board);
+    void handlePromotion(Move move, Board* board);
+    void updateCastlingRights(Move move, Board* board);
 
   public: 
     MoveMaker();
     
     void makeMove(Move move, Board* board);
-    void tryMakeMove(Move move, Board* board); 
-    void handleEP(Move move, Board* board);
-    void unmakeMove(Move move, Board* board);
-    void handleCastling(Move move, Board* board);
-    void handlePromotion(Move move, Board* board);
-    void updateCastlingRights(Move move, Board* board);
+    void unmakeLastMove(Board* board);
 };
 
