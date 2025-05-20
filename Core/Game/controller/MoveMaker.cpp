@@ -135,7 +135,8 @@ void MoveMaker::handleCastling(Move move, Board* board) {
 }
 
 void MoveMaker::handleEP(Move move, Board* board) {
-  if(move.pawnTwoSquares) {
+  std::cout << "falgs = " << move.flags << std::endl;
+  if(move.isPawnTwoSquaresForwardMove()) {
     //we created en passant opportunity
     int squareBehindPawn = (board->sideToMove == Piece::WHITE) ? move.toSquare-16 : move.toSquare+16;
     if(board->sideToMove == Piece::WHITE) {
@@ -145,7 +146,7 @@ void MoveMaker::handleEP(Move move, Board* board) {
     }
   } else {
     //if we've played en passant
-    if(move.isEnPassant) {
+    if(move.isEnPassantMove()) {
       int sqBehindTarget = (board->sideToMove == Piece::WHITE) ? GameState::getEPSquareWhite(board->gameState)-16 : GameState::getEPSquareBlack(board->gameState)+16;
       //take the pawn behind
       board->theBoard[sqBehindTarget] = 0;
@@ -175,7 +176,9 @@ void MoveMaker::tryMakeMove(Move move, Board* board) {
 bool MoveMaker::isLegalMove(Move *move, std::vector<Move> moveList) {
   for(auto i : moveList) {
     if(i == *move) {
-      i.flags = move->flags;
+      std::cout << "moveflags = " << move->flags << std::endl;
+      i.setPromotionFlags(move->getPromotionFlags());
+      std::cout <<"flags here" << i.flags << std::endl;
       *move = i;
       return true;
     }

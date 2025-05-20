@@ -173,12 +173,12 @@ void PseudoLegalMoveGenerator::generatePawnMoves(int startSquare, Board* board, 
       moveVector.push_back(move1);
     }
   }
-  if(startRank == currRank && (!board->theBoard[move2.toSquare]) && (!board->theBoard[move2.toSquare]) 
+  if(startRank == currRank && (!board->theBoard[move2.toSquare]) && (!board->theBoard[move1.toSquare]) 
     && (!(0x88 & (move2.toSquare)))) {
     //we are on start rank
     //there is no piece in the way
     //move is not out of board
-    move2.pawnTwoSquares = true;
+    move2.setPawnTwoSquares();
     moveVector.push_back(move2);
   }
 
@@ -199,7 +199,7 @@ void PseudoLegalMoveGenerator::generatePawnMoves(int startSquare, Board* board, 
     //check for en passant opportunity
     int epTargetSq = (board->sideToMove == Piece::WHITE) ? GameState::getEPSquareWhite(board->gameState) : GameState::getEPSquareBlack(board->gameState);
     if(cap1.toSquare == epTargetSq) {
-      cap1.isEnPassant = true;
+      cap1.setIsEnPassant();
       moveVector.push_back(cap1);
     }
   }
@@ -218,7 +218,7 @@ void PseudoLegalMoveGenerator::generatePawnMoves(int startSquare, Board* board, 
     //check for en passant opportunity
     int epTargetSq = (board->sideToMove == Piece::WHITE) ? GameState::getEPSquareWhite(board->gameState) : GameState::getEPSquareBlack(board->gameState);
     if(cap2.toSquare == epTargetSq) {
-      cap2.isEnPassant = true;
+      cap2.setIsEnPassant();
       moveVector.push_back(cap2);
     }
   }

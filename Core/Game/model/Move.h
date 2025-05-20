@@ -3,7 +3,7 @@
 struct Move {
   int fromSquare;
   int toSquare;
-  bool isEnPassant = false;
+
   bool pawnTwoSquares = false;
 
   //kingCastleMove: bit 1
@@ -16,26 +16,38 @@ struct Move {
   //is pawn two square move: bit 8
   unsigned int flags = 0;
 
+  //bit masks
+  static constexpr unsigned int CASTLE_KING = 0b1;
+  static constexpr unsigned int CASTLE_QUEEN = 0b10;
+  static constexpr unsigned int PROMOTE_QUEEN = 0b100;
+  static constexpr unsigned int PROMOTE_BISHOP = 0b1000;
+  static constexpr unsigned int PROMOTE_ROOK = 0b10000;
+  static constexpr unsigned int PROMOTE_KNIGHT = 0b100000;
+  static constexpr unsigned int EN_PASSANT = 0b1000000; 
+  static constexpr unsigned int PAWN_TWO_SQUARES = 0b10000000;
+  static constexpr unsigned int PROMOTION_FLAGS = 0b111100;
+
   //setters
-  void setCastleKingMove() { flags |= 0b1; }
-  void setCastleQueenMove() { flags |= 0b10; }
-  void setPromoteQueen() { flags |= 0b100; }
-  void setPromoteBishop() { flags |= 0b1000; }
-  void setPromoteRook() { flags |= 0b10000; }
-  void setPromoteKnight() { flags |= 0b100000; }
-  void setIsEnPassant() { flags |= 0b1000000; }
-  void setPawnTwoSquares() { flags |= 0b10000000; }
+  void setCastleKingMove() { flags |= CASTLE_KING; }
+  void setCastleQueenMove() { flags |= CASTLE_QUEEN; }
+  void setPromoteQueen() { flags |= PROMOTE_QUEEN; }
+  void setPromoteBishop() { flags |= PROMOTE_BISHOP; }
+  void setPromoteRook() { flags |= PROMOTE_ROOK; }
+  void setPromoteKnight() { flags |= PROMOTE_KNIGHT; }
+  void setIsEnPassant() { flags |= EN_PASSANT; }
+  void setPawnTwoSquares() { flags |= PAWN_TWO_SQUARES; }
+  void setPromotionFlags(int promFlags) { flags &= ~PROMOTION_FLAGS; flags |= promFlags; }
 
   //getters
-  bool isCastleKingMove() const { return flags & 0b1; }
-  bool isCastleQueenMove() const { return flags & 0b10; }
-  bool isPromoteQueenMove() const { return flags & 0b100; }
-  bool isPromoteBishopMove() const { return flags & 0b1000; }
-  bool isPromoteRookMove() const { return flags & 0b10000; }
-  bool isPromoteKnightMove() const { return flags & 0b100000; }
-  bool isEnPassantMove() const { return flags & 0b1000000; }
-  bool isPawnTwoSquaresForwardMove() const { return flags & 0b10000000; }
-  int getPromotionFlags() const { return flags & 0b111100; }
+  bool isCastleKingMove() const { return flags & CASTLE_KING; }
+  bool isCastleQueenMove() const { return flags & CASTLE_QUEEN; }
+  bool isPromoteQueenMove() const { return flags & PROMOTE_QUEEN; }
+  bool isPromoteBishopMove() const { return flags & PROMOTE_BISHOP; }
+  bool isPromoteRookMove() const { return flags & PROMOTE_ROOK; }
+  bool isPromoteKnightMove() const { return flags & PROMOTE_KNIGHT; }
+  bool isEnPassantMove() const { return flags & EN_PASSANT; }
+  bool isPawnTwoSquaresForwardMove() const { return flags & PAWN_TWO_SQUARES; }
+  int getPromotionFlags() const { return flags & PROMOTION_FLAGS; }
 
   
   bool operator==(const Move& m)  const {
