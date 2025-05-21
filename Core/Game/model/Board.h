@@ -20,11 +20,9 @@ class Board {
   enum TypeGame { HumanVHuman, HumanVAI };
 
   public:
-    static int theBoard[16*8];
+    std::array<int, 16*8> theBoard = {};
     Piece::Team sideToMove;
 
-    //least sig bit for kingside castling, second for queenside castling
-    //where the respective color can en passant to
     //half-move clock
     int currentPly = 0;
 
@@ -34,7 +32,7 @@ class Board {
     std::array<boardState, 1024> boardStates;
 
     unsigned int gameState = 0;
-
+    int blackKingLoc = -1, whiteKingLoc = -1;
 
   private:
     Piece::Team humanTeam;
@@ -47,6 +45,7 @@ class Board {
     void askTeam();
     void askTypeGame();
     void switchSideToMove();
+    bool isInCheck(Piece::Team);
     
 
     Piece::Team getHumanTeam() { return humanTeam; };

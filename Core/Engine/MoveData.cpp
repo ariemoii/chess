@@ -7,8 +7,8 @@
 MoveData::MoveData() {
   preComputeMoveData();
   preComputeAttackArray();
+  preComputeDirectionArray();
   //printAttackArray();
-  
 }
 
 void MoveData::preComputeMoveData() {
@@ -27,40 +27,61 @@ void MoveData::preComputeMoveData() {
 
 void MoveData::preComputeAttackArray() {
   //sliding pieces
-  preComputeAttackSlidingPiece(bishopMoves, ABISHOP);
-  preComputeAttackSlidingPiece(rookMoves, AROOK);
-  preComputeAttackSlidingPiece(queenMoves, AQUEEN);
+  preComputeAttackSlidingPiece(bishopMoves, ATTACK_BISHOP);
+  preComputeAttackSlidingPiece(rookMoves, ATTACK_ROOK);
+  preComputeAttackSlidingPiece(queenMoves, ATTACK_QUEEN);
 
   //knight moves
   for(auto &dir : knightMoves) {
     if(dir == 0) break;
-    attackArray[DELTA_OFFSET + dir] |= AKNIGHT;
+    attackArray[DELTA_OFFSET + dir] |= ATTACK_KNIGHT;
   }
 
   //king moves
   for(auto &dir : kingMoves) {
     if(dir == 0) break;
-    attackArray[DELTA_OFFSET + dir] |= AKING;
+    attackArray[DELTA_OFFSET + dir] |= ATTACK_KING;
   }
 
   //white pawn attacks
-  attackArray[DELTA_OFFSET + NE] |= AWPAWN;
-  attackArray[DELTA_OFFSET + NW] |= AWPAWN;
+  attackArray[DELTA_OFFSET + NE] |= ATTACK_WHITE_PAWN;
+  attackArray[DELTA_OFFSET + NW] |= ATTACK_WHITE_PAWN;
 
   //black pawn attacks
-  attackArray[DELTA_OFFSET + SE] |= ABPAWN;
-  attackArray[DELTA_OFFSET + SW] |= ABPAWN;
+  attackArray[DELTA_OFFSET + SE] |= ATTACK_BLACK_PAWN;
+  attackArray[DELTA_OFFSET + SW] |= ATTACK_BLACK_PAWN;
 }
 
-void MoveData::preComputeAttackSlidingPiece(std::array<int, 64> slidingPieceArray, AttackPieceType type) {
+void MoveData::preComputeAttackSlidingPiece(std::array<int, 64> slidingPieceArray, int type) {
   for(auto &dir : slidingPieceArray) {
     if(dir == 0) break;
     //a board has 8 squares on both sides, so generate delta for all of them
     for(int i = 1; i <= 8; i++) {
-      
       attackArray[DELTA_OFFSET + (dir*i)] |= type;
     }
   }
+}
+
+void MoveData::preComputeDirectionArray() {
+  //direction array rook and queen
+  for(int dir : rookMoves) {
+    if(dir == 0) {
+      break;
+    }
+    for(int i = 1; i <= 8; i++) {
+      directionVector[DELTA_OFFSET + (dir*i)] = dir;
+    }
+  }
+
+  //direction array bishop and queen
+  for(int dir : bishopMoves) {
+    if(dir == 0) {
+      break;
+    }
+    for(int i = 1; i <= 8; i++) {
+      directionVector[DELTA_OFFSET + (dir*i)] = dir;
+    }
+  }  
 }
 
 void MoveData::printAttackArray() {
@@ -75,6 +96,34 @@ void MoveData::printAttackArray() {
   }
 }
 
-bool MoveData::canAttack(AttackPieceType type, int fromSquare, int toSquare) {
-  return attackArray[DELTA_OFFSET + fromSquare-toSquare] & type;
+bool MoveData::canAttack(int piece, int fromSquare, int toSquare, Board* board) {
+  int delta = toSquare - fromSquare;
+  int type = pieceToAttackPiece[piece];
+  if(!(attackArray[delta+DELTA_OFFSET] & type)) {
+    //we cannot get there
+    return false;
+  }
+  //if we have a non-sliding piece, we are done
+  if(!Piece::isSlidingPiece(piece)) {
+    return true;
+  }
+
+  //we need to traverse ray
+  int direction = directionVector[delta+DELTA_OFFSET];
+  while(fromSquare != toSquare) {
+    int pieceOnNextSquare = board->theBoard[fromSquare+direction];
+    if(pieceOnNextSquare) {
+      //there is a piece in the way
+      if(Piece::isTeam(piece, Piece::getTeam(pieceOnNextSquare))) {
+        //they are the same team
+        return false;
+      }
+      if(fromSquare+direction == toSquare) {
+        //only if they are from different teams
+        return true;
+      }
+    }
+    fromSquare += direction;
+  }
+  return true;
 }

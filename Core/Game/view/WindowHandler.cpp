@@ -50,9 +50,9 @@ void WindowHandler::drawBoard(Board *board, Piece::Team bottomTeam) {
         continue;
       }
       if(bottomTeam == Piece::WHITE) {
-        pieceDrawer.drawPiece(Piece::getType(board->theBoard[i*16+j]), Piece::getTeam(board->theBoard[i*16+j]), 7-j, 7-i);
+        pieceDrawer.drawPiece(Piece::getType(board->theBoard[i*16+j]), Piece::getTeam(board->theBoard[i*16+j]), j, 7-i);
       } else {
-        pieceDrawer.drawPiece(Piece::getType(board->theBoard[i*16+j]), Piece::getTeam(board->theBoard[i*16+j]), j, i);
+        pieceDrawer.drawPiece(Piece::getType(board->theBoard[i*16+j]), Piece::getTeam(board->theBoard[i*16+j]), 7-j, i);
       }
     }
   }
@@ -70,7 +70,7 @@ Move WindowHandler::getMove(int squarePressed, Piece::Team humanTeam, Board* boa
     }
   }
   if(humanTeam == Piece::WHITE) {
-    //((7*16)+7) is needed because the board is mirrored
+    //((7*16)+7) is needed because the board is flipped
     //when looking at it from whites perspective
     move.fromSquare = ((7*16)+7)-move.fromSquare;
     move.toSquare = ((7*16)+7)-move.toSquare;
@@ -127,6 +127,6 @@ int WindowHandler::whatSquare(int xCoord, int yCoord) {
   int file, rank;
   file = xCoord/PIXEL_SQUARE_WIDTH;
   rank = yCoord/PIXEL_SQUARE_WIDTH;
-  int sq = rank*16 + file;
+  int sq = rank*16 + 7-file;
   return sq;
 }

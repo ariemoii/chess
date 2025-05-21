@@ -38,21 +38,27 @@ void FENparser::parseFen(std::string fen, Board *board) {
     words.push_back(word);
   }
   std::string boardFEN = words[0];
-  int file = 7, rank = 7;
+  int file = 0, rank = 7;
   for(auto &i : boardFEN) {
     if(i == '/') {
       //new rank;
-      file = 7;
+      file = 0;
       rank--;
     } else {
       if(isdigit(i)) {
-        file -= i-'0';
+        file += i-'0';
       } else {
         Piece::Team pieceColour = (isupper(i)) ? Piece::WHITE : Piece::BLACK;
         Piece::PieceType pieceType = pieceTypeFromSymbol(tolower(i));
         int piece = pieceType | pieceColour;
+        if(piece  == (Piece::WHITE | Piece::KING)) {
+          board->whiteKingLoc = rank*16 + file;
+        }
+        if(piece == (Piece::BLACK | Piece::KING)) {
+          board->blackKingLoc = rank*16 + file;
+        }
         board->theBoard[rank*16 + file] = piece;
-        file--;
+        file++;
       }
     }
   }

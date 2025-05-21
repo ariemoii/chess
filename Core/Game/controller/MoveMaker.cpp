@@ -24,6 +24,14 @@ void MoveMaker::makeMove(Move move, Board* board) {
   board->boardStates[board->currentPly].gameState = board->gameState;
   board->boardStates[board->currentPly].playedMove = move;
 
+  //update king locations
+  if(piece == (Piece::KING | Piece::WHITE)) {
+    board->whiteKingLoc = move.toSquare;
+  }
+  if(piece == (Piece::KING | Piece::BLACK)) {
+    board->blackKingLoc = move.toSquare;
+  }
+
   handleCastling(move, board);
 
   updateCastlingRights(move, board);
@@ -32,6 +40,7 @@ void MoveMaker::makeMove(Move move, Board* board) {
 
   handleEP(move, board);
 
+  
 
   //we need to change the side to move
   board->switchSideToMove();
@@ -44,9 +53,9 @@ void MoveMaker::makeMove(Move move, Board* board) {
 
 void MoveMaker::updateCastlingRights(Move move, Board* board) {
   int rights = GameState::getCastlingRights(board->gameState);
-  int kingStartSq = (board->sideToMove == Piece::WHITE) ? 3 : 115;
-  int kingSideRookSq = (board->sideToMove == Piece::WHITE) ? 0 : 112;
-  int queenSideRookSq = (board->sideToMove == Piece::WHITE) ? 7 : 119;
+  int kingStartSq = (board->sideToMove == Piece::WHITE) ? 4 : 116;
+  int kingSideRookSq = (board->sideToMove == Piece::WHITE) ? 7 : 119;
+  int queenSideRookSq = (board->sideToMove == Piece::WHITE) ? 0 : 112;
 
   //we moved the king
   if(move.fromSquare == kingStartSq) {
@@ -81,8 +90,8 @@ void MoveMaker::updateCastlingRights(Move move, Board* board) {
     }
   }
 
-  kingSideRookSq = (board->sideToMove == Piece::WHITE) ? 112 : 0;
-  queenSideRookSq = (board->sideToMove == Piece::WHITE) ? 119 : 7;
+  kingSideRookSq = (board->sideToMove == Piece::WHITE) ? 7 : 119;
+  queenSideRookSq = (board->sideToMove == Piece::WHITE) ? 0 : 112;
 
   //we've taken kingside rook: update rights accordingly
   if(move.toSquare == kingSideRookSq) {
@@ -123,12 +132,12 @@ void MoveMaker::handlePromotion(Move move, Board* board) {
 void MoveMaker::handleCastling(Move move, Board* board) {
   //handle castling moves
   if(move.isCastleKingMove()) {
-    board->theBoard[move.fromSquare-3] = 0;
-    board->theBoard[move.fromSquare-1] = board->sideToMove | Piece::ROOK;
+    board->theBoard[move.fromSquare+3] = 0;
+    board->theBoard[move.fromSquare+1] = board->sideToMove | Piece::ROOK;
   }
   if(move.isCastleQueenMove()) {
-    board->theBoard[move.fromSquare+4] = 0;
-    board->theBoard[move.fromSquare+1] = board->sideToMove | Piece::ROOK;
+    board->theBoard[move.fromSquare-4] = 0;
+    board->theBoard[move.fromSquare-1] = board->sideToMove | Piece::ROOK;
   }
 }
 
@@ -194,12 +203,20 @@ void MoveMaker::unmakeLastMove(Board* board) {
   }
 
   if(lastMove.isCastleKingMove()) {
-    board->theBoard[lastMove.fromSquare-3] = board->sideToMove | Piece::ROOK;
-    board->theBoard[lastMove.fromSquare-1] = 0;
+    board->theBoard[lastMove.fromSquare+3] = board->sideToMove | Piece::ROOK;
+    board->theBoard[lastMove.fromSquare+1] = 0;
   }
 
   if(lastMove.isCastleQueenMove()) {
-    board->theBoard[lastMove.fromSquare+4] = board->sideToMove | Piece::ROOK;
-    board->theBoard[lastMove.fromSquare+1] = 0;
+    board->theBoard[lastMove.fromSquare-4] = board->sideToMove | Piece::ROOK;
+    board->theBoard[lastMove.fromSquare-1] = 0;
+  }
+
+  int piece = board->theBoard[lastMove.fromSquare];
+  if(piece == (Piece::KING | Piece::WHITE)) {
+    board->whiteKingLoc = lastMove.fromSquare;
+  }
+  if(piece == (Piece::KING | Piece::BLACK)) {
+    board->blackKingLoc = lastMove.fromSquare;
   }
 } 

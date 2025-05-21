@@ -1,18 +1,34 @@
 #pragma once
 #include "model/Piece.h"
+#include "model/Board.h"
 #include <array>
 
 class MoveData {
   public:
     enum Direction { N=16, E=1, S=-16, W=-1, NE=17, SE=-15, SW=-17, NW=15 };
-    enum AttackPieceType { AKING = 0b1, AQUEEN = 0b10, AROOK = 0b100, ABISHOP = 0b1000, AKNIGHT = 0b10000, AWPAWN = 0b100000, ABPAWN = 0b1000000};
+
+    static constexpr int ATTACK_KING = 1 << (Piece::KING | Piece::NONE);
+    static constexpr int ATTACK_QUEEN = 1 << (Piece::QUEEN | Piece::NONE);
+    static constexpr int ATTACK_ROOK = 1 << (Piece::ROOK | Piece::NONE);
+    static constexpr int ATTACK_BISHOP = 1 << (Piece::BISHOP | Piece::NONE);
+    static constexpr int ATTACK_KNIGHT = 1 << (Piece::KNIGHT | Piece::NONE);
+    static constexpr int ATTACK_WHITE_PAWN = 1 << (Piece::PAWN | Piece::WHITE);
+    static constexpr int ATTACK_BLACK_PAWN = 1 << (Piece::PAWN | Piece::BLACK);
+
+    //used to convert from piece to attack piece
+    static constexpr int pieceToAttackPiece[32] {
+      0, 0, 0, 0, 0, 0, 0, 0,
+      0, ATTACK_WHITE_PAWN, ATTACK_KNIGHT, ATTACK_KING, ATTACK_QUEEN, ATTACK_ROOK, ATTACK_BISHOP, 0, 
+      0, ATTACK_BLACK_PAWN, ATTACK_KNIGHT, ATTACK_KING, ATTACK_QUEEN, ATTACK_ROOK, ATTACK_BISHOP, 0,
+      0, 0, 0, 0, 0, 0, 0, 0
+    };
 
     MoveData();
 
     //used for debugging
     void printAttackArray();
 
-    bool canAttack(AttackPieceType type, int fromSquare, int toSquare);
+    bool canAttack(int piece, int fromSquare, int toSquare, Board* board);
 
   public:
 
@@ -27,6 +43,8 @@ class MoveData {
     std::array<int, 64> blackPawnMoves;
     std::array<int, 64> whitePawnMoves;
 
+    std::array<int, 265> directionVector;
+
   private:
     //attack array from 
     //https://web.archive.org/web/20071027053053/http://www.brucemo.com/compchess/programming/0x88.htm,
@@ -36,5 +54,6 @@ class MoveData {
   private:
     void preComputeMoveData();
     void preComputeAttackArray();
-    void preComputeAttackSlidingPiece(std::array<int, 64> slidingPieceArray, AttackPieceType type);
+    void preComputeAttackSlidingPiece(std::array<int, 64> slidingPieceArray, int type);
+    void preComputeDirectionArray();
 };

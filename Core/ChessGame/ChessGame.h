@@ -5,15 +5,18 @@
 #include "controller/MoveMaker.h"
 #include "MoveGenerator.h"
 
+constexpr unsigned int SCREEN_HEIGHT = 800;
+constexpr unsigned int SCREEN_WIDTH = 800;
+
 class ChessGame {
   
 
 
   public:
     ChessGame();
-    void runChess();
+    virtual void runChess() = 0;
 
-    private:
-    //render board
-    void renderAll(WindowHandler* windowHandler, Board* board);
+    protected:
+      //render board
+      void renderAll(WindowHandler* windowHandler, Board* board);
 };

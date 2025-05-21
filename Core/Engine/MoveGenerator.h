@@ -20,6 +20,7 @@ class MoveGenerator {
   public:
     std::vector<Move> generateLegalMoves(Board* board);
     bool isCheckMate(Board* board);
+    bool isInCheck(Board* board, Piece::Team team);
 
   private:
 

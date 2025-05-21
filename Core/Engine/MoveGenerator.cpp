@@ -32,4 +32,15 @@ std::vector<Move> MoveGenerator::generateLegalMoves(Board* board) {
 
 bool MoveGenerator::isCheckMate(Board* board) {
   
+
+}
+
+bool MoveGenerator::isInCheck(Board* board, Piece::Team team) {
+  for(int i = 0; i < board->theBoard.size(); i++) {
+    int piece = board->theBoard[i];
+    if(piece == 0) {
+      continue;
+    }
+    
+  }
 }

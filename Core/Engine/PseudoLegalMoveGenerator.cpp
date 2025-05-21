@@ -130,19 +130,19 @@ void PseudoLegalMoveGenerator::generateKingMoves(int startSquare, Board* board, 
     int castlingRights = (board->sideToMove == Piece::WHITE) ? GameState::getCastlingRights(board->gameState) : (GameState::getCastlingRights(board->gameState) >> 2);
     if(castlingRights & 0b01 && (!(startSquare-2 & 0x88))) {
       //we have kingside castling rights
-      if(!board->theBoard[startSquare-1] && !board->theBoard[startSquare-2]) {
+      if(!board->theBoard[startSquare+1] && !board->theBoard[startSquare+2]) {
         //there are no pieces in the way
-        Move moveCastling = { startSquare, startSquare-2 };
+        Move moveCastling = { startSquare, startSquare+2 };
         //moveCastling.isCastleKing = true;
         moveCastling.setCastleKingMove();
         moveVector.push_back(moveCastling);
       }
     }
-    if(castlingRights & 0b10 && (!(startSquare+2 & 0x88))) {
+    if(castlingRights & 0b10 && (!(startSquare-2 & 0x88))) {
       //we have queenside castling rights
-      if(!board->theBoard[startSquare+1] && !board->theBoard[startSquare+2]) {
+      if(!board->theBoard[startSquare-1] && !board->theBoard[startSquare-2]) {
         //there are no pieces in the way
-        Move move = { startSquare, startSquare+2 };
+        Move move = { startSquare, startSquare-2 };
         //move.isCastleQueen = true;
         move.setCastleQueenMove();
         moveVector.push_back(move);

@@ -1,7 +1,5 @@
 #include "Board.h"
 
-int Board::theBoard[16*8] = {};
-
 Board::Board() { 
   for(int i = 0; i < 8; i++) {
     for(int j = 0; j < 8; j++) {
@@ -67,7 +65,3 @@ void Board::switchSideToMove() {
   }
 }
 
-// bool Board::isMate() {
-//   bool isMate = false;
-//   std::vector<Move> legalMoves = moveGenerator.generateLegalMoves(this);
-// }
