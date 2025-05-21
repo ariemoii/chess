@@ -13,19 +13,17 @@ std::vector<Move> MoveGenerator::generateLegalMoves(Board* board) {
   for(Move moveToCheck : pseudoLegalMoves) {
     Piece::Team ourSide = board->sideToMove;
     moveMaker.makeMove(moveToCheck, board);
-    if(isInCheck(board, ourSide)) {
-      std::cout << "AHAHAH THAT RESULTS IN CHECK MORON\n";
-    }
-    std::vector<Move> pseudoLegalMovesOpp = pseudoLegalMoveGenerator.generatePseudolegalMoves(board);
-    bool illegal = false;
-    for(Move oppMove : pseudoLegalMovesOpp) {
-      if(Piece::isType(board->theBoard[oppMove.toSquare], Piece::KING)) {
-        //we've captured the king (illegal move)
-        //do nothign
-        illegal = true;
-        break;
-      }
-    }
+    // std::vector<Move> pseudoLegalMovesOpp = pseudoLegalMoveGenerator.generatePseudolegalMoves(board);
+    // bool illegal = false;
+    // for(Move oppMove : pseudoLegalMovesOpp) {
+    //   if(Piece::isType(board->theBoard[oppMove.toSquare], Piece::KING)) {
+    //     //we've captured the king (illegal move)
+    //     //do nothign
+    //     illegal = true;
+    //     break;
+    //   }
+    // }
+    bool illegal = isInCheck(board, ourSide);
     if(!illegal) {
       fullyLegalMoves.push_back(moveToCheck);
     }
@@ -34,9 +32,22 @@ std::vector<Move> MoveGenerator::generateLegalMoves(Board* board) {
   return fullyLegalMoves;
 }
 
+//we are in checkmate if we are in check and are still in check after
+//any move we can make
 bool MoveGenerator::isCheckMate(Board* board) {
-  
-
+  Piece::Team ourTeam = board->sideToMove;
+  bool amInCheck = isInCheck(board, ourTeam);
+  if(!amInCheck) {
+    return false;
+  }
+  std::vector<Move> legalMoves = generateLegalMoves(board);
+  for(Move legalMove : legalMoves) {
+    moveMaker.makeMove(legalMove, board);
+    if(!isInCheck(board, ourTeam)) {
+      return false;
+    }
+  }
+  return true;
 }
 
 bool MoveGenerator::isInCheck(Board* board, Piece::Team team) {

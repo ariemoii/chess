@@ -34,6 +34,14 @@ void PlayerVPlayer::runChess() {
               i.setPromotionFlags(move.getPromotionFlags());
               move = i;
               moveMaker.makeMove(move, &board);
+              if(moveGenerator.isCheckMate(&board)) {
+                if(board.sideToMove == Piece::WHITE) {
+                  std::cout << "Checkmate! Black wins!\n";
+                } else {
+                  std::cout << "Checkmate! White wins!\n";
+                }
+                windowHandler.window.close();
+              }
               break;
             }
           }

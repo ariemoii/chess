@@ -120,8 +120,10 @@ bool MoveData::canAttack(int piece, int fromSquare, int toSquare, Board* board) 
       }
       if(fromSquare+direction == toSquare) {
         //only if they are from different teams
+        //and we can take it
         return true;
       }
+      return false;
     }
     fromSquare += direction;
   }
