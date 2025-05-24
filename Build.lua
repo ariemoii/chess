@@ -10,6 +10,10 @@ workspace "Chess-App"
 
 OutputDir = "%{cfg.system}-%{cfg.architecture}/%{cfg.buildcfg}"
 
+filter "configurations:Debug"
+  symbols "On"
+  optimize "Off"
+
 group "Core"
 	include "Core/Build-Core.lua"
 group ""

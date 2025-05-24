@@ -8,7 +8,7 @@ int main() {
   char ans;
   std::cin >> ans;
   while(ans != '1' /*&& ans != 2*/) {
-    std::cout << "wrong choice, try agian.\n";
+    std::cout << "wrong choice, try again.\n";
     std::cin >> ans;
   }
   getchar();

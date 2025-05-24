@@ -1,5 +1,5 @@
 ./Setup-Linux.sh
 cd ../Core
-make
+make config=debug
 cd ../Chess-App
-make
+make config=debug

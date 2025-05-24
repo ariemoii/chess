@@ -68,10 +68,13 @@ void FENparser::parseFen(std::string fen, Board *board) {
 void FENparser::extractBoardState(std::vector<std::string> words, Board* board) {
   //extract side to move
   std::string sideToMove = words[1];
+  Piece::Team side;
   if(sideToMove == "w") {
     board->sideToMove = Piece::WHITE;
+    side = Piece::WHITE;
   } else {
     board->sideToMove = Piece::BLACK;
+    side = Piece::BLACK;
   }
 
 
@@ -98,7 +101,21 @@ void FENparser::extractBoardState(std::vector<std::string> words, Board* board) 
     }
     GameState::setCastlingRights(rights, board->gameState);
   }
+
+  //extract en passant squares
+  std::string enPassant = words[3];
+  if(enPassant != "-") {
+    int square = MoveData::squareToInt(enPassant);
+    if(side == Piece::WHITE) {
+      GameState::setEPSquareWhite(square, board->gameState);
+    } else {
+      GameState::setEPSquareBlack(square, board->gameState);
+    }
+  }
+
 }
+
+
 
 std::string FENparser::requestFEN() {
   std::cout << "enter FEN to load from position, or press 'enter' for standard game:\n";

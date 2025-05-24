@@ -26,14 +26,18 @@ void PlayerVPlayer::runChess() {
           //left mouse button has been pressed
           int pressedSquare = windowHandler.whatSquare(event.mouseButton.x, event.mouseButton.y);
           Move move = windowHandler.getMove(pressedSquare, board.getHumanTeam(), &board);
-          std::cout << "Square = " << move.fromSquare << "\n";
+          std::cout << "Square = " << move.fromSquare;
+          std::cout << " = " << MoveData::intToSquare(move.fromSquare) << "\n";
           std::vector<Move> moveList = moveGenerator.generateLegalMoves(&board);
+          bool legal = false;
           for(auto i : moveList) {
             if(i == move) {
+              legal = true;
               //move is legal
               i.setPromotionFlags(move.getPromotionFlags());
               move = i;
               moveMaker.makeMove(move, &board);
+              //board.switchHumanTeam();
               if(moveGenerator.isCheckMate(&board)) {
                 if(board.sideToMove == Piece::WHITE) {
                   std::cout << "Checkmate! Black wins!\n";
@@ -45,6 +49,9 @@ void PlayerVPlayer::runChess() {
               break;
             }
           }
+          // if(!legal) {
+          //   std::cout << "illegal move" << std::endl;
+          // }
         }
       }
       if(event.type == sf::Event::KeyPressed) {

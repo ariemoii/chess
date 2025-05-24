@@ -129,3 +129,20 @@ bool MoveData::canAttack(int piece, int fromSquare, int toSquare, Board* board) 
   }
   return true;
 }
+
+int MoveData::squareToInt(std::string square) {
+  int file, rank;
+  file = square[0] - 'a';
+  rank = square[1] - '0' - 1;
+  return file+rank*16;
+}
+
+std::string MoveData::intToSquare(int square) {
+  char file, rank;
+  rank = square/16 + '1';
+  file = square%8 + 'a';
+  std::string returning;
+  returning.push_back(file);
+  returning.push_back(rank);
+  return returning;
+}

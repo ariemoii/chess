@@ -5,13 +5,14 @@ project "Chess-Core"
    targetdir "Binaries/%{cfg.buildcfg}"
    staticruntime "off"
 
-   files { "Game/**.h", "Game/**.cpp", "Engine/**.h", "Engine/**.cpp", "ChessGame/**.cpp", "ChessGame/**.h" }
+   files { "Game/**.h", "Game/**.cpp", "Engine/**.h", "Engine/**.cpp", "ChessGame/**.cpp", "ChessGame/**.h", "Testing/**.cpp", "Testing/**.h"}
 
    includedirs
    {
     "Game",
     "Engine",
-    "ChessGame"
+    "ChessGame",
+    "Testing"
    }
 
    targetdir ("../Binaries/" .. OutputDir .. "/%{prj.name}")
@@ -28,6 +29,7 @@ project "Chess-Core"
        defines { "DEBUG" }
        runtime "Debug"
        symbols "On"
+       optimize "Off"
 
    filter "configurations:Release"
        defines { "RELEASE" }

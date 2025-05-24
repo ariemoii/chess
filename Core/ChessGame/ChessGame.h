@@ -4,6 +4,7 @@
 #include "model/Board.h"
 #include "controller/MoveMaker.h"
 #include "MoveGenerator.h"
+#include "MoveData.h"
 
 constexpr unsigned int SCREEN_HEIGHT = 800;
 constexpr unsigned int SCREEN_WIDTH = 800;

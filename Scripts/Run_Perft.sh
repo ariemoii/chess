@@ -1,0 +1,2 @@
+cd ../Binaries/Debug
+./Tester "$@"

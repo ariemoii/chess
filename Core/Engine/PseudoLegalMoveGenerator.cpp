@@ -125,30 +125,28 @@ void PseudoLegalMoveGenerator::generateKingMoves(int startSquare, Board* board, 
       continue;
     }
     moveVector.push_back(moveNormal);
-
-    //castling moves
-    int castlingRights = (board->sideToMove == Piece::WHITE) ? GameState::getCastlingRights(board->gameState) : (GameState::getCastlingRights(board->gameState) >> 2);
-    if(castlingRights & 0b01 && (!(startSquare-2 & 0x88))) {
-      //we have kingside castling rights
-      if(!board->theBoard[startSquare+1] && !board->theBoard[startSquare+2]) {
-        //there are no pieces in the way
-        Move moveCastling = { startSquare, startSquare+2 };
-        //moveCastling.isCastleKing = true;
-        moveCastling.setCastleKingMove();
-        moveVector.push_back(moveCastling);
-      }
-    }
-    if(castlingRights & 0b10 && (!(startSquare-2 & 0x88))) {
-      //we have queenside castling rights
-      if(!board->theBoard[startSquare-1] && !board->theBoard[startSquare-2]) {
-        //there are no pieces in the way
-        Move move = { startSquare, startSquare-2 };
-        //move.isCastleQueen = true;
-        move.setCastleQueenMove();
-        moveVector.push_back(move);
-      }
+  }
+  //castling moves
+  int castlingRights = (board->sideToMove == Piece::WHITE) ? GameState::getCastlingRights(board->gameState) : (GameState::getCastlingRights(board->gameState) >> 2);
+  if(castlingRights & 0b01 && (!(startSquare-2 & 0x88))) {
+    //we have kingside castling rights
+    if(!board->theBoard[startSquare+1] && !board->theBoard[startSquare+2]) {
+      //there are no pieces in the way
+      Move moveCastling = { startSquare, startSquare+2 };
+      moveCastling.setCastleKingMove();
+      moveVector.push_back(moveCastling);
     }
   }
+  if(castlingRights & 0b10 && (!(startSquare-2 & 0x88))) {
+    //we have queenside castling rights
+    if(!board->theBoard[startSquare-1] && !board->theBoard[startSquare-2] && !board->theBoard[startSquare-3]) {
+      //there are no pieces in the way
+      Move move = { startSquare, startSquare-2 };
+      move.setCastleQueenMove();
+      moveVector.push_back(move);
+    }
+  }
+
   return;
 }
 
@@ -207,14 +205,14 @@ void PseudoLegalMoveGenerator::generatePawnMoves(int startSquare, Board* board, 
   if((!(cap2.toSquare & 0x88)) && board->theBoard[cap2.toSquare]) {
     //we can capture to the other side
     if(isLegalCapture(cap2, board)) {
-      if(cap2.toSquare == promotionRank) {
+      if(cap2.toSquare/16 == promotionRank) {
         //we can promote
         generatePromotionMoves(moveVector, cap2);
       } else {
         moveVector.push_back(cap2);
       }
     }
-  } else if(!(cap1.toSquare & 0x88)) {
+  } else if(!(cap2.toSquare & 0x88)) {
     //check for en passant opportunity
     int epTargetSq = (board->sideToMove == Piece::WHITE) ? GameState::getEPSquareWhite(board->gameState) : GameState::getEPSquareBlack(board->gameState);
     if(cap2.toSquare == epTargetSq) {

@@ -10,20 +10,27 @@ moveMaker(MoveMaker())
 std::vector<Move> MoveGenerator::generateLegalMoves(Board* board) {
   std::vector<Move> pseudoLegalMoves = pseudoLegalMoveGenerator.generatePseudolegalMoves(board);
   std::vector<Move> fullyLegalMoves;
+  Piece::Team ourSide = board->sideToMove;
+  bool areInCheckCurrently = isInCheck(board, ourSide);
   for(Move moveToCheck : pseudoLegalMoves) {
-    Piece::Team ourSide = board->sideToMove;
+    if(areInCheckCurrently && (moveToCheck.isCastleKingMove() || moveToCheck.isCastleQueenMove())) {
+      //cant castle out of check
+      continue;
+    }
+    if(moveToCheck.isCastleKingMove()) {
+      if(isInCheck(board, ourSide, moveToCheck.fromSquare+1)) {
+        //cant castle through check kingside
+        continue;
+      }
+    } 
+    if(moveToCheck.isCastleQueenMove()) {
+      if(isInCheck(board, ourSide, moveToCheck.fromSquare-1)) {
+        //cant castle through check queenside either
+        continue;
+      }
+    }
     moveMaker.makeMove(moveToCheck, board);
-    // std::vector<Move> pseudoLegalMovesOpp = pseudoLegalMoveGenerator.generatePseudolegalMoves(board);
-    // bool illegal = false;
-    // for(Move oppMove : pseudoLegalMovesOpp) {
-    //   if(Piece::isType(board->theBoard[oppMove.toSquare], Piece::KING)) {
-    //     //we've captured the king (illegal move)
-    //     //do nothign
-    //     illegal = true;
-    //     break;
-    //   }
-    // }
-    bool illegal = isInCheck(board, ourSide);
+    bool illegal = isInCheck(board, ourSide); 
     if(!illegal) {
       fullyLegalMoves.push_back(moveToCheck);
     }
@@ -41,16 +48,10 @@ bool MoveGenerator::isCheckMate(Board* board) {
     return false;
   }
   std::vector<Move> legalMoves = generateLegalMoves(board);
-  for(Move legalMove : legalMoves) {
-    moveMaker.makeMove(legalMove, board);
-    if(!isInCheck(board, ourTeam)) {
-      return false;
-    }
-  }
-  return true;
+  return(legalMoves.size() == 0);
 }
 
-bool MoveGenerator::isInCheck(Board* board, Piece::Team team) {
+bool MoveGenerator::isInCheck(Board* board, Piece::Team team, int square) {
   for(int i = 0; i < board->theBoard.size(); i++) {
     int piece = board->theBoard[i];
     if(piece == 0) {
@@ -62,6 +63,9 @@ bool MoveGenerator::isInCheck(Board* board, Piece::Team team) {
       continue;
     }
     int kingLoc = (team == Piece::WHITE) ? board->whiteKingLoc : board->blackKingLoc;
+    if(square != -1) {
+      kingLoc = square;
+    }
     if(moveData.canAttack(piece, i, kingLoc, board)) {
       //they can attack the king, so we are in check.
       return true;

@@ -65,3 +65,7 @@ void Board::switchSideToMove() {
   }
 }
 
+void Board::switchHumanTeam() {
+  humanTeam = (humanTeam == Piece::WHITE) ? Piece::BLACK : Piece::WHITE;
+}
+

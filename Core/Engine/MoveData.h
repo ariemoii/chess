@@ -29,6 +29,8 @@ class MoveData {
     void printAttackArray();
 
     bool canAttack(int piece, int fromSquare, int toSquare, Board* board);
+    static std::string intToSquare(int square);
+    static int squareToInt(std::string square);
 
   public:
 

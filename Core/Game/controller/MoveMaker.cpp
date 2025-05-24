@@ -90,8 +90,10 @@ void MoveMaker::updateCastlingRights(Move move, Board* board) {
     }
   }
 
-  kingSideRookSq = (board->sideToMove == Piece::WHITE) ? 7 : 119;
-  queenSideRookSq = (board->sideToMove == Piece::WHITE) ? 0 : 112;
+  //switch side of startRookSquare to update castling rights
+  //if we've taken a rook
+  kingSideRookSq = (board->sideToMove == Piece::WHITE) ? 119 : 7;
+  queenSideRookSq = (board->sideToMove == Piece::WHITE) ? 112 : 0;
 
   //we've taken kingside rook: update rights accordingly
   if(move.toSquare == kingSideRookSq) {
@@ -157,13 +159,12 @@ void MoveMaker::handleEP(Move move, Board* board) {
       //take the pawn behind
       board->theBoard[sqBehindTarget] = 0;
     }
-
-    //remove target en passant square
-    if(board->sideToMove == Piece::WHITE) {
-      GameState::setEPSquareWhite(0b100000000, board->gameState);
-    } else {
-      GameState::setEPSquareBlack(0b100000000, board->gameState);
-    }
+  }
+  //remove target en passant square
+  if(board->sideToMove == Piece::WHITE) {
+    GameState::setEPSquareWhite(0b100000000, board->gameState);
+  } else {
+    GameState::setEPSquareBlack(0b100000000, board->gameState);
   }
 }
 

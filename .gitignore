@@ -8,6 +8,8 @@ Binaries/
 *.vcxproj.filters
 *.sln
 *.log
+callgrind.*
+*.data
 Makefile
 
 # Exclude
