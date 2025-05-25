@@ -1,18 +1,28 @@
-project "Chess-Core"
-   kind "StaticLib"
+project "Chess-App"
+   kind "ConsoleApp"
    language "C++"
    cppdialect "C++17"
    targetdir "Binaries/%{cfg.buildcfg}"
    staticruntime "off"
 
-   files { "Game/**.h", "Game/**.cpp", "Engine/**.h", "Engine/**.cpp", "ChessGame/**.cpp", "ChessGame/**.h", "Testing/**.cpp", "Testing/**.h"}
+   files { "Source/**.h", "Source/**.cpp", "Core/**.h", "Core/**.cpp" }
 
    includedirs
    {
-    "Game",
-    "Engine",
-    "ChessGame",
-    "Testing"
+      "Source",
+
+	  -- Include Core
+	  "../Core/**",
+   }
+
+   links
+   {
+      "Chess-Core",
+      "sfml-graphics",
+      "sfml-window",
+      "sfml-system",
+      "sfml-audio",
+      "sfml-network"
    }
 
    targetdir ("../Binaries/" .. OutputDir .. "/%{prj.name}")
@@ -20,16 +30,12 @@ project "Chess-Core"
 
    filter "system:windows"
        systemversion "latest"
-       defines { }
-
-   filter "system:linux"
-       buildoptions {"-lsfml-graphics", "-lsfml-window", "-lsfml-system"}
+       defines { "WINDOWS" }
 
    filter "configurations:Debug"
        defines { "DEBUG" }
        runtime "Debug"
        symbols "On"
-       optimize "Off"
 
    filter "configurations:Release"
        defines { "RELEASE" }
