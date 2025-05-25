@@ -5,24 +5,9 @@
 #define DELTA_OFFSET 128
 
 MoveData::MoveData() {
-  preComputeMoveData();
   preComputeAttackArray();
   preComputeDirectionArray();
   //printAttackArray();
-}
-
-void MoveData::preComputeMoveData() {
-  //knightMoveDelta on the 128 square board
-  //knightMoves are unique in that they are not a sliding piece
-  knightMoves = { 31, 33, 18, -14, -31, -33, -18, 14, 0 };
-
-  bishopMoves = { NE, SE, SW, NW, 0 };
-  rookMoves = { N, E, S, W, 0 };
-  queenMoves = { N, E, S, W, NE, SE, SW, NW, 0 };
-
-  //king moves like a queen but 1 square
-  kingMoves = { N, E, S, W, NE, SE, SW, NW, 0 };
-
 }
 
 void MoveData::preComputeAttackArray() {
@@ -52,7 +37,7 @@ void MoveData::preComputeAttackArray() {
   attackArray[DELTA_OFFSET + SW] |= ATTACK_BLACK_PAWN;
 }
 
-void MoveData::preComputeAttackSlidingPiece(std::array<int, 64> slidingPieceArray, int type) {
+void MoveData::preComputeAttackSlidingPiece(const std::array<int, 64>& slidingPieceArray, int type) {
   for(auto &dir : slidingPieceArray) {
     if(dir == 0) break;
     //a board has 8 squares on both sides, so generate delta for all of them

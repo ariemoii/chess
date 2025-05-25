@@ -4,7 +4,8 @@ Perft::Perft() :
 fenParser(FENparser()),
 moveGenerator(MoveGenerator()),
 board(Board()),
-moveMaker(MoveMaker())
+moveMaker(MoveMaker()),
+pseudoLegalMoveGenerator(PseudoLegalMoveGenerator())
 {
   testFEN = fenParser.requestFEN();
   fenParser.parseFen(testFEN, &board);
@@ -14,7 +15,8 @@ int Perft::runPerft(int depth, int maxDepth) {
   if(depth <= 0) {
     return 1;
   }
-  std::vector<Move> moves = moveGenerator.generateLegalMoves(&board);
+  std::vector<Move> moves;
+  moveGenerator.generateLegalMoves(&board, moves);
   int numPos = 0;
   for(Move move : moves) {
     moveMaker.makeMove(move, &board);

@@ -1,4 +1,5 @@
 #include "PlayerVPlayer.h"
+#include <unordered_set>
 
 
 void PlayerVPlayer::runChess() {
@@ -28,7 +29,8 @@ void PlayerVPlayer::runChess() {
           Move move = windowHandler.getMove(pressedSquare, board.getHumanTeam(), &board);
           std::cout << "Square = " << move.fromSquare;
           std::cout << " = " << MoveData::intToSquare(move.fromSquare) << "\n";
-          std::vector<Move> moveList = moveGenerator.generateLegalMoves(&board);
+          std::vector<Move> moveList;
+          moveGenerator.generateLegalMoves(&board, moveList);
           bool legal = false;
           for(auto i : moveList) {
             if(i == move) {
@@ -36,7 +38,15 @@ void PlayerVPlayer::runChess() {
               //move is legal
               i.setPromotionFlags(move.getPromotionFlags());
               move = i;
+              Piece::Team ourTeam = board.sideToMove;
               moveMaker.makeMove(move, &board);
+              std::cout << "new kingDangerSquares for team " << ourTeam << "=\n";
+              std::unordered_set<int> kingDangerSquares;
+              moveGenerator.generateKingDangerSquares(ourTeam, &board, kingDangerSquares);
+              for(const int& sq : kingDangerSquares) {
+                std::cout << sq << " ";
+              }
+              putchar('\n');
               //board.switchHumanTeam();
               if(moveGenerator.isCheckMate(&board)) {
                 if(board.sideToMove == Piece::WHITE) {

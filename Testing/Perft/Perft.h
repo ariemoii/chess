@@ -6,6 +6,7 @@
 #include "model/Move.h"
 #include "controller/MoveMaker.h"
 #include "MoveData.h"
+#include "PseudoLegalMoveGenerator.h"
 
 #include <iostream>
 #include <string>
@@ -22,6 +23,7 @@ class Perft {
     std::string testFEN;
     Board board;
     MoveMaker moveMaker;
+    PseudoLegalMoveGenerator pseudoLegalMoveGenerator;
 
 
   public:

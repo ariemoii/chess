@@ -1,30 +1,30 @@
-#include "PseudoLegalMoveGenerator.h"
+#include "LegalMoveGenerator.h"
 
-PseudoLegalMoveGenerator::PseudoLegalMoveGenerator() :
+LegalMoveGenerator::LegalMoveGenerator() :
 moveData(MoveData())
 { 
 };
 
 
-void PseudoLegalMoveGenerator::generatePseudolegalMoves(Board* board, std::vector<Move>& pseudoLegalMoves) {
+void LegalMoveGenerator::generateLegalMoves(Board* board, std::vector<Move>& legalMoves) {
   //16*8 is the size of the board
   for(int i = 0; i < 16*8; i++) {
     int piece = board->theBoard[i];
     if(!Piece::isTeam(piece, board->sideToMove)) continue;
     if(Piece::isSlidingPiece(piece)) {
-      generateSlidingPieceMoves(i, Piece::getType(piece), board, pseudoLegalMoves);
+      generateSlidingPieceMoves(i, Piece::getType(piece), board, legalMoves);
     } else if(Piece::isType(piece, Piece::KNIGHT)) {
-      generateKnightMoves(i, board, pseudoLegalMoves);
+      generateKnightMoves(i, board, legalMoves);
     } else if(Piece::isType(piece, Piece::KING)) {
-      generateKingMoves(i, board, pseudoLegalMoves);
+      generateKingMoves(i, board, legalMoves);
     } else if(Piece::isType(piece, Piece::PAWN)) {
-      generatePawnMoves(i, board, pseudoLegalMoves);
+      generatePawnMoves(i, board, legalMoves);
     }
   }
   return;
 }
 
-void PseudoLegalMoveGenerator::generateSlidingPieceMoves(int startSquare, Piece::PieceType type, Board* board, std::vector<Move>& moveVector) {
+void LegalMoveGenerator::generateSlidingPieceMoves(int startSquare, Piece::PieceType type, Board* board, std::vector<Move>& moveVector) {
   int piece = board->theBoard[startSquare];
   const std::array<int, 64>& slidingArray = 
   (type == Piece::BISHOP) ? moveData.bishopMoves :
@@ -59,7 +59,7 @@ void PseudoLegalMoveGenerator::generateSlidingPieceMoves(int startSquare, Piece:
   return;
 }
 
-bool PseudoLegalMoveGenerator::isLegalCapture(Move move, Board* board) {
+bool LegalMoveGenerator::isLegalCapture(Move move, Board* board) {
   int piece = board->theBoard[move.fromSquare];
   Piece::Team ourTeam = board->sideToMove;
   int capturePiece = board->theBoard[move.toSquare];
@@ -72,7 +72,7 @@ bool PseudoLegalMoveGenerator::isLegalCapture(Move move, Board* board) {
   }
 }
 
-void PseudoLegalMoveGenerator::generateKnightMoves(int startSquare, Board* board, std::vector<Move>& moveVector) {
+void LegalMoveGenerator::generateKnightMoves(int startSquare, Board* board, std::vector<Move>& moveVector) {
   for(const auto &i : moveData.knightMoves) {
     if(i == 0) {
       break;
@@ -96,7 +96,7 @@ void PseudoLegalMoveGenerator::generateKnightMoves(int startSquare, Board* board
   return;
 }
 
-void PseudoLegalMoveGenerator::generateKingMoves(int startSquare, Board* board, std::vector<Move>& moveVector) {
+void LegalMoveGenerator::generateKingMoves(int startSquare, Board* board, std::vector<Move>& moveVector) {
   for(auto &i : moveData.kingMoves) {
     if(i == 0) {
       break;
@@ -141,7 +141,7 @@ void PseudoLegalMoveGenerator::generateKingMoves(int startSquare, Board* board, 
   return;
 }
 
-void PseudoLegalMoveGenerator::generatePawnMoves(int startSquare, Board* board, std::vector<Move>& moveVector) {
+void LegalMoveGenerator::generatePawnMoves(int startSquare, Board* board, std::vector<Move>& moveVector) {
   Piece::Team sideToMove = board->sideToMove;
   int startRank = (sideToMove == Piece::WHITE) ? 1 : 6;
   int promotionRank = (sideToMove == Piece::WHITE) ? 7 : 0;
@@ -213,7 +213,7 @@ void PseudoLegalMoveGenerator::generatePawnMoves(int startSquare, Board* board, 
   }
 }
 
-void PseudoLegalMoveGenerator::generatePromotionMoves(std::vector<Move>& moveVector, Move move) {
+void LegalMoveGenerator::generatePromotionMoves(std::vector<Move>& moveVector, Move move) {
   std::vector<Move> promMoves(4, move);
   promMoves[0].setPromoteBishop();
   promMoves[1].setPromoteQueen();
@@ -222,3 +222,12 @@ void PseudoLegalMoveGenerator::generatePromotionMoves(std::vector<Move>& moveVec
   moveVector.insert(moveVector.end(), promMoves.begin(), promMoves.end());
 }
 
+
+
+void LegalMoveGenerator::calculateAttackData(Board* board) {
+  
+}
+
+void LegalMoveGenerator::calculateKingDangerSquares(Board* board, std::array<int, 64>& kingDangerSquares) {
+  
+}

@@ -36,14 +36,11 @@ class MoveData {
 
     //store the direction squares a piece can move to
 
-
-    std::array<int, 64> bishopMoves;
-    std::array<int, 64> rookMoves;
-    std::array<int, 64> queenMoves;
-    std::array<int, 64> kingMoves;
-    std::array<int, 64> knightMoves;
-    std::array<int, 64> blackPawnMoves;
-    std::array<int, 64> whitePawnMoves;
+    const std::array<int, 64> bishopMoves = { NE, SE, SW, NW, 0 };
+    const std::array<int, 64> rookMoves = { N, E, S, W, 0 };
+    const std::array<int, 64> queenMoves = { N, E, S, W, NE, SE, SW, NW, 0 };
+    const std::array<int, 64> kingMoves = { N, E, S, W, NE, SE, SW, NW, 0 };
+    const std::array<int, 64> knightMoves = { 31, 33, 18, -14, -31, -33, -18, 14, 0 };
 
     std::array<int, 265> directionVector;
 
@@ -56,6 +53,6 @@ class MoveData {
   private:
     void preComputeMoveData();
     void preComputeAttackArray();
-    void preComputeAttackSlidingPiece(std::array<int, 64> slidingPieceArray, int type);
+    void preComputeAttackSlidingPiece(const std::array<int, 64>& slidingPieceArray, int type);
     void preComputeDirectionArray();
 };

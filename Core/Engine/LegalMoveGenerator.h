@@ -6,15 +6,15 @@
 #include "MoveData.h"
 #include <vector>
 
-class PseudoLegalMoveGenerator {
+class LegalMoveGenerator {
   public:
 
   private:
     MoveData moveData;
 
   public:
-    PseudoLegalMoveGenerator();
-    void generatePseudolegalMoves(Board* board, std::vector<Move>& pseudoLegalMoves);
+    LegalMoveGenerator();
+    void generateLegalMoves(Board* board, std::vector<Move>& legalMoves);
 
   private:
     void generateSlidingPieceMoves(int startSquare, Piece::PieceType type, Board* board, std::vector<Move>& moveVector);
@@ -23,4 +23,6 @@ class PseudoLegalMoveGenerator {
     void generatePawnMoves(int startSquare, Board* board, std::vector<Move>& moveVector);
     void generatePromotionMoves(std::vector<Move>& moveVector, Move move);
     bool isLegalCapture(Move move, Board* board);
+    void calculateAttackData(Board* board);
+    void calculateKingDangerSquares(Board* board, std::array<int, 64>& kingDangerSquares);
 };
