@@ -32,12 +32,6 @@ void MoveGenerator::generateLegalMoves(Board* board, std::vector<Move>& legalMov
         continue;
       }
     }
-    // moveMaker.makeMove(moveToCheck, board);
-    // bool illegal = isInCheck(board, ourSide); 
-    // if(!illegal) {
-    //   legalMoves.push_back(moveToCheck);
-    // }
-    // moveMaker.unmakeLastMove(board);
 
     if(moveToCheck.isEnPassantMove()) {
       moveMaker.makeMove(moveToCheck, board);
@@ -55,6 +49,12 @@ void MoveGenerator::generateLegalMoves(Board* board, std::vector<Move>& legalMov
     }
 
 
+    moveMaker.makeMove(moveToCheck, board);
+    bool illegal = isInCheck(board, ourSide); 
+    if(!illegal) {
+      legalMoves.push_back(moveToCheck);
+    }
+    moveMaker.unmakeLastMove(board);
 
     legalMoves.push_back(moveToCheck);
   }
