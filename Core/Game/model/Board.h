@@ -45,7 +45,6 @@ class Board {
     void askTeam();
     void askTypeGame();
     void switchSideToMove();
-    bool isInCheck(Piece::Team);
     void switchHumanTeam();
     
 

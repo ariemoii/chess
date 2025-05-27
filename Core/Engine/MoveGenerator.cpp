@@ -12,51 +12,32 @@ void MoveGenerator::generateLegalMoves(Board* board, std::vector<Move>& legalMov
   pseudoLegalMoveGenerator.generatePseudolegalMoves(board, pseudoLegalMoves);
   Piece::Team ourSide = board->sideToMove;
   std::unordered_set<int> kingDangerSquares;
-  generateKingDangerSquares(ourSide, board, kingDangerSquares);
+  //generateKingDangerSquares(ourSide, board, kingDangerSquares);
   int kingPosition = (ourSide == Piece::WHITE) ? board->whiteKingLoc : board->blackKingLoc;
-  bool areInCheckCurrently = kingDangerSquares.count(kingPosition);
+  bool areInCheckCurrently = isInCheck(board, ourSide, kingPosition);
   for(Move moveToCheck : pseudoLegalMoves) {
     if(areInCheckCurrently && (moveToCheck.isCastleKingMove() || moveToCheck.isCastleQueenMove())) {
       //cant castle out of check
       continue;
     }
     if(moveToCheck.isCastleKingMove()) {
-      if(kingDangerSquares.count(moveToCheck.fromSquare+1)) {
+      if(isInCheck(board, ourSide, moveToCheck.fromSquare+1)) {
         //cant castle through check kingside
         continue;
       }
     } 
     if(moveToCheck.isCastleQueenMove()) {
-      if(kingDangerSquares.count(moveToCheck.fromSquare-1)) {
+      if(isInCheck(board, ourSide, moveToCheck.fromSquare-1)) {
         //cant castle through check queenside either
         continue;
       }
     }
-
-    if(moveToCheck.isEnPassantMove()) {
-      moveMaker.makeMove(moveToCheck, board);
-      if(isInCheck(board, ourSide)) {
-        continue;
-      }
-      moveMaker.unmakeLastMove(board);
-    }
-
-    if(kingPosition == moveToCheck.fromSquare) {
-      //if we move the king, see if we are moving to an attacked square
-      if(kingDangerSquares.count(moveToCheck.toSquare)) {
-        continue;
-      }
-    }
-
-
     moveMaker.makeMove(moveToCheck, board);
     bool illegal = isInCheck(board, ourSide); 
     if(!illegal) {
       legalMoves.push_back(moveToCheck);
     }
     moveMaker.unmakeLastMove(board);
-
-    legalMoves.push_back(moveToCheck);
   }
   return;
 }
