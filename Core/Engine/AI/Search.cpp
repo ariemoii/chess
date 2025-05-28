@@ -89,8 +89,8 @@ Move bestMove(Board* board) {
       bestEval = eval;
       theBest = move;
     }
-    std::cout << "eval for move " << MoveData::intToSquare(move.fromSquare) << MoveData::intToSquare(move.toSquare);
-    std::cout << " = " << eval << "\n";
+    // std::cout << "eval for move " << MoveData::intToSquare(move.fromSquare) << MoveData::intToSquare(move.toSquare);
+    // std::cout << " = " << eval << "\n";
   }
   return theBest;
 }

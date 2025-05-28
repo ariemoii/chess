@@ -3,7 +3,11 @@
 #include "controller/FENparser.h"
 #include <sstream>
 #include "model/Move.h"
+#include "AI/Search.h"
 #include "MoveData.h"
+
+static FENparser parser;
+static MoveMaker moveMaker;
 
 std::string getInput() {
   std::string fen;
@@ -34,20 +38,38 @@ Move getRealMove(std::string move, Board* board) {
       //jup, thats promotion
       switch(move[5]) {
         case 'q':
-          realMove.isPromoteQueenMove();
+          realMove.setPromoteQueen();
           break;
         case 'r':
-          realMove.isPromoteRookMove();
+          realMove.setPromoteRook();
           break;
         case 'n':
-          realMove.isPromoteKnightMove();
+          realMove.setPromoteKnight();
           break;
         case 'b':
-          realMove.isPromoteBishopMove();
+          realMove.setPromoteBishop();
           break;
       }
     }
+    if(abs(realMove.toSquare/16-realMove.fromSquare/16) == 2) {
+      //double pawn push
+      realMove.setPawnTwoSquares();
+    }
+    if(realMove.fromSquare%8 != realMove.toSquare%8 && board->theBoard[realMove.fromSquare] != 0) {
+      //en passant
+      realMove.setIsEnPassant();
+    }
   }
+  if(Piece::isType(piece, Piece::KING)) {
+    if(realMove.fromSquare-realMove.toSquare == -2) {
+      //kingside castle
+      realMove.setCastleKingMove();
+    } else if(realMove.fromSquare-realMove.toSquare == 2) {
+      //queenside castle
+      realMove.setCastleQueenMove();
+    }
+  }
+  return realMove;
 }
 
 
@@ -57,22 +79,19 @@ std::vector<Move> extractMoves(std::vector<std::string> words, int placeMoveList
     //there are moves to parse
     for(int i = placeMoveList+1; i < words.size(); i++) {
       Move move = getRealMove(words[i], board);
-      
       moves.push_back(move);
     }
-  }
-  for(Move move : moves) {
-    std::cout << MoveData::intToSquare(move.fromSquare) << MoveData::intToSquare(move.toSquare) << "\n";
   }
   return moves;
 }
 
 
 void processPositionCommand(std::string message, Board* board) {
-  FENparser parser;
+  
   std::istringstream iss(message);
   std::vector<std::string> words;
   std::string word;
+  
   while(iss >> word) {
     words.push_back(word);
   }
@@ -83,10 +102,32 @@ void processPositionCommand(std::string message, Board* board) {
     parser.parseFen(words[2], board);
     placeMoveList = 3;
   }
-  std::vector<Move> moves = extractMoves(words, placeMoveList);
+  std::vector<Move> moves = extractMoves(words, placeMoveList, board);
   for(Move move : moves) {
     //play them
+    moveMaker.makeMove(move, board);
   }
+}
+
+
+std::string processGoCommand(std::string message, Board* board) {
+  std::string move;
+  Move theMove = bestMove(board);
+  move+= MoveData::intToSquare(theMove.fromSquare);
+  move+= MoveData::intToSquare(theMove.toSquare);
+  if(theMove.isPromoteQueenMove()) {
+    move+='q';
+  }
+  if(theMove.isPromoteBishopMove()) {
+    move+='b';
+  }
+  if(theMove.isPromoteKnightMove()) {
+    move+='n';
+  }
+  if(theMove.isPromoteBishopMove()) {
+    move+='b';
+  }
+  return move;
 }
 
 

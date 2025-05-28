@@ -1,6 +1,5 @@
 #include "lichess-bot.h"
 #include <iostream>
-#include "Engine/AI/Search.h"
 #include "model/Board.h"
 
 int main() {
@@ -16,11 +15,9 @@ int main() {
     } else if(message == "ucinewgame") ;
     if(message.find("position") != std::string::npos) {
       processPositionCommand(message, &board);
-    } else if(message == "go") {
-
+    } else if(message.find("go") != std::string::npos) {
+      std::cout << "bestmove " << processGoCommand(message, &board) << "\n";
     }
-
-
     getline(std::cin, message);
 
   }
