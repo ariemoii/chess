@@ -35,7 +35,7 @@ project "Chess-Core"
        defines { "RELEASE" }
        runtime "Release"
        optimize "On"
-       symbols "On"
+       symbols "Off"
 
    filter "configurations:Dist"
        defines { "DIST" }

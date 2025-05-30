@@ -7,7 +7,6 @@
 MoveData::MoveData() {
   preComputeAttackArray();
   preComputeDirectionArray();
-  std::cout << "making movedata\n";
   //printAttackArray(); 
 }
 
