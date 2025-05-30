@@ -45,7 +45,8 @@ static int evaluate(Board* board) {
   return evaluation*perspective;
 }
 
-static int search(int depth, Board* board) {
+//use alpa-beta pruning
+static int search(int depth, Board* board, int alpha, int beta) {
   if(depth == 0) {
     return evaluate(board);
   }
@@ -62,15 +63,18 @@ static int search(int depth, Board* board) {
     return 0;
   }
 
-  int bestEval = -999999999;
-
   for(Move move : moves) {
     moveMaker.makeMove(move, board);
-    int evaluation = -search(depth-1, board);
-    bestEval = std::max(bestEval, evaluation);
+    int evaluation = -search(depth-1, board, -beta, -alpha);
+    
     moveMaker.unmakeLastMove(board);
+    if(evaluation >= beta) {
+      //Avoid this position
+      return beta;
+    }
+    alpha = std::max(alpha, evaluation);
   }
-  return bestEval;
+  return alpha;
 }
 
 
@@ -80,10 +84,10 @@ Move bestMove(Board* board) {
   std::vector<Move> moves;
   moveGenerator.generateLegalMoves(board, moves);
   Move theBest;
-  int bestEval = -999999999;
+  int bestEval = -1999999999;
   for(Move move : moves) {
     moveMaker.makeMove(move, board);
-    int eval = -search(2, board);
+    int eval = -search(4, board, -1999999999, 1999999999);
     moveMaker.unmakeLastMove(board);
     if(eval >= bestEval) {
       bestEval = eval;
