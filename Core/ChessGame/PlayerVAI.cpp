@@ -52,10 +52,11 @@ void PlayerVAI::runChess() {
           Move move = windowHandler.getMove(pressedSquare, board.getHumanTeam(), &board);
           std::cout << "Square = " << move.fromSquare;
           std::cout << " = " << MoveData::intToSquare(move.fromSquare) << "\n";
-          std::vector<Move> moveList;
+          MoveList moveList;
           moveGenerator.generateLegalMoves(&board, moveList);
           bool legal = false;
-          for(auto i : moveList) {
+          for(int j = 0; j < moveList.count; j++) {
+            Move i = moveList[j];
             if(i == move) {
               legal = true;
               //move is legal

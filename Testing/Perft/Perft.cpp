@@ -12,17 +12,18 @@ pseudoLegalMoveGenerator(PseudoLegalMoveGenerator())
 }
 
 int Perft::runPerft(int depth, int maxDepth) {
-  std::vector<Move> moves;
+  MoveList moves;
   moveGenerator.generateLegalMoves(&board, moves);
   if(depth == 1) {
-    return moves.size();
+    return moves.count;
   }
   if(depth <= 0) {
     return 1;
   }
   
   int numPos = 0;
-  for(Move move : moves) {
+  for(int i = 0; i < moves.count; i++) {
+    Move move = moves[i];
     moveMaker.makeMove(move, &board);
     int nodes = runPerft(depth-1, maxDepth);
     numPos += nodes;
