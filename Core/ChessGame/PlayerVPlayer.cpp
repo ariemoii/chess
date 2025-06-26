@@ -29,10 +29,10 @@ void PlayerVPlayer::runChess() {
           Move move = windowHandler.getMove(pressedSquare, board.getHumanTeam(), &board);
           std::cout << "Square = " << move.fromSquare;
           std::cout << " = " << MoveData::intToSquare(move.fromSquare) << "\n";
-          MoveList moveList;
+          std::vector<Move> moveList;
           moveGenerator.generateLegalMoves(&board, moveList);
           bool legal = false;
-          for(int j = 0; j < moveList.count; j++) {
+          for(int j = 0; j < moveList.size(); j++) {
             Move i = moveList[j];
             if(i == move) {
               legal = true;
@@ -41,14 +41,6 @@ void PlayerVPlayer::runChess() {
               move = i;
               Piece::Team ourTeam = board.sideToMove;
               moveMaker.makeMove(move, &board);
-              std::cout << "new kingDangerSquares for team " << ourTeam << "=\n";
-              std::unordered_set<int> kingDangerSquares;
-              moveGenerator.generateKingDangerSquares(ourTeam, &board, kingDangerSquares);
-              for(const int& sq : kingDangerSquares) {
-                std::cout << sq << " ";
-              }
-              putchar('\n');
-              //board.switchHumanTeam();
               if(moveGenerator.isCheckMate(&board)) {
                 if(board.sideToMove == Piece::WHITE) {
                   std::cout << "Checkmate! Black wins!\n";
@@ -60,9 +52,6 @@ void PlayerVPlayer::runChess() {
               break;
             }
           }
-          // if(!legal) {
-          //   std::cout << "illegal move" << std::endl;
-          // }
         }
       }
       if(event.type == sf::Event::KeyPressed) {

@@ -1,6 +1,7 @@
 #include "FENparser.h"
 #include <iostream>
 #include <sstream>
+#include <cmath>
 
 
 FENparser::FENparser(){};
@@ -58,7 +59,10 @@ void FENparser::parseFen(std::string fen, Board *board) {
           board->blackKingLoc = rank*16 + file;
         }
         board->theBoard[rank*16 + file] = piece;
+        int bitboardSquare = 8*rank + file;
+        board->pieceBitboards[piece] |= (U64)pow(2, bitboardSquare);
         file++;
+
       }
     }
   }
