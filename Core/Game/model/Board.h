@@ -10,6 +10,8 @@
  * https://web.archive.org/web/20071027053053/http://www.brucemo.com/compchess/programming/0x88.htm
  */
 
+typedef unsigned long long U64;
+
 struct boardState {
   unsigned int gameState;
   Move playedMove;
@@ -33,6 +35,8 @@ class Board {
 
     unsigned int gameState = 0;
     int blackKingLoc = -1, whiteKingLoc = -1;
+
+    U64 pieceBitboards[32] = {0};
 
   private:
     Piece::Team humanTeam;
