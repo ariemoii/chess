@@ -4,8 +4,6 @@ struct Move {
   int fromSquare;
   int toSquare;
 
-  bool pawnTwoSquares = false;
-
   //kingCastleMove: bit 1
   //queenCastleMove: bit 2
   //promote Q: bit 3
@@ -53,4 +51,18 @@ struct Move {
   bool operator==(const Move& m)  const {
     return fromSquare == m.fromSquare && toSquare == m.toSquare;
   }
+};
+
+struct MoveList {
+  Move moves[256];
+  int count = 0;
+  void add(Move move) {
+    moves[count] = move;
+    count++;
+  }
+
+  inline Move operator[](int i) const {
+    return moves[i];
+  }
+  
 };

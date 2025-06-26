@@ -124,8 +124,8 @@ std::string processGoCommand(std::string message, Board* board) {
   if(theMove.isPromoteKnightMove()) {
     move+='n';
   }
-  if(theMove.isPromoteBishopMove()) {
-    move+='b';
+  if(theMove.isPromoteRookMove()) {
+    move+='r';
   }
   return move;
 }
