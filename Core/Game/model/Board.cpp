@@ -1,4 +1,5 @@
 #include "Board.h"
+#include <bitset>
 
 Board::Board() { 
   for(int i = 0; i < 8; i++) {
@@ -14,6 +15,16 @@ void Board::printBoard() {
       std::cout << Piece::getType(theBoard[i*16 + j]) << Piece::getTeam(theBoard[i*16 + j]) << " ";
     }
     std::cout << '\n';
+  }
+  std::cout << "bitboards:\n";
+  for(int i = 0; i < 32; i++) {
+    if(Piece::isTeam(i, Piece::WHITE) || Piece::isTeam(i, Piece::BLACK)) {
+      int team = Piece::getTeam(i);
+      int type = Piece::getType(i);
+      std::cout << "team: " << team << " type: " << type << "\n";
+      std::bitset<64> x(this->pieceBitboards[i]);
+      std::cout << x << "\n";
+    }
   }
 }
 
