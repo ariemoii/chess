@@ -36,23 +36,37 @@ class MoveData {
 
     //store the direction squares a piece can move to
 
-    const std::array<int, 64> bishopMoves = { NE, SE, SW, NW, 0 };
-    const std::array<int, 64> rookMoves = { N, E, S, W, 0 };
-    const std::array<int, 64> queenMoves = { N, E, S, W, NE, SE, SW, NW, 0 };
-    const std::array<int, 64> kingMoves = { N, E, S, W, NE, SE, SW, NW, 0 };
-    const std::array<int, 64> knightMoves = { 31, 33, 18, -14, -31, -33, -18, 14, 0 };
+
+    std::array<int, 64> bishopDirections;
+    std::array<int, 64> rookDirections;
+    std::array<int, 64> queenDirections;
+    std::array<int, 64> kingDirections;
+    std::array<int, 64> knightDirections;
+    std::array<int, 64> blackPawnDirections;
+    std::array<int, 64> whitePawnDirections;
 
     std::array<int, 265> directionVector;
+
+    //store for every square a bitboard of where a piece on that square can move to
+    std::array<U64, 64> bishopMoves;
+    std::array<U64, 64> rookMoves;
+    std::array<U64, 64> queenMoves;
+    std::array<U64, 64> kingMoves;
+    std::array<U64, 64> knightMoves;
 
   private:
     //attack array from 
     //https://web.archive.org/web/20071027053053/http://www.brucemo.com/compchess/programming/0x88.htm,
     std::array<int, 265> attackArray{};
 
+    //stored N, E, S, W
+    std::array<std::array<int, 4>, 64> squaresTillEdge;
 
   private:
     void preComputeMoveData();
     void preComputeAttackArray();
-    void preComputeAttackSlidingPiece(const std::array<int, 64>& slidingPieceArray, int type);
+    void preComputeAttackSlidingPiece(std::array<int, 64> slidingPieceArray, int type);
     void preComputeDirectionArray();
+    void preComputeSquaresTillEdge();
+    void preComputeMoveBitboards();
 };

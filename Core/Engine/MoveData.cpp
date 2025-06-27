@@ -5,25 +5,80 @@
 #define DELTA_OFFSET 128
 
 MoveData::MoveData() {
+  preComputeMoveData();
   preComputeAttackArray();
   preComputeDirectionArray();
-  //printAttackArray(); 
+  preComputeSquaresTillEdge();
+  preComputeMoveBitboards();
+  //printAttackArray();
+}
+
+void MoveData::preComputeSquaresTillEdge() {
+  for(int i = 0; i < 64; i++) {
+    int rank = i/8;
+    int file = i%8;
+
+    //north
+    squaresTillEdge[i][0] = 7-rank;
+    //east
+    squaresTillEdge[i][1] = 7-file;
+    //south
+    squaresTillEdge[i][2] = rank;
+    //west
+    squaresTillEdge[i][3] = file;
+  }
+}
+
+void MoveData::preComputeMoveBitboards() {
+  //rook
+  for(int i = 0; i < 64; i++) {
+    //north
+    for(int j = 1; j <= squaresTillEdge[i][0]; j++) {
+      rookMoves[i] |= 1ULL << (i + 8*j);
+    }
+    //east
+    for(int j = 1; j <= squaresTillEdge[i][1]; j++) {
+      rookMoves[i] |= 1ULL << (i + 1*j);
+    }
+    //south
+    for(int j = 1; j <= squaresTillEdge[i][2]; j++) {
+      rookMoves[i] |= 1ULL << (i + -8*j);
+    }
+    //west
+    for(int j = 1; j <= squaresTillEdge[i][3]; j++) {
+      rookMoves[i] |= 1ULL << (i + -1*j);
+    }
+  }
+}
+
+void MoveData::preComputeMoveData() {
+  //knightMoveDelta on the 128 square board
+  //knightDirections are unique in that they are not a sliding piece
+  knightDirections = { 31, 33, 18, -14, -31, -33, -18, 14, 0 };
+
+  bishopDirections = { NE, SE, SW, NW, 0 };
+  rookDirections = { N, E, S, W, 0 };
+  queenDirections = { N, E, S, W, NE, SE, SW, NW, 0 };
+
+  //king moves like a queen but 1 square
+  kingDirections = { N, E, S, W, NE, SE, SW, NW, 0 };
+
 }
 
 void MoveData::preComputeAttackArray() {
   //sliding pieces
-  preComputeAttackSlidingPiece(bishopMoves, ATTACK_BISHOP);
-  preComputeAttackSlidingPiece(rookMoves, ATTACK_ROOK);
-  preComputeAttackSlidingPiece(queenMoves, ATTACK_QUEEN);
+  preComputeAttackSlidingPiece(bishopDirections, ATTACK_BISHOP);
+  preComputeAttackSlidingPiece(rookDirections, ATTACK_ROOK);
+  preComputeAttackSlidingPiece(queenDirections, ATTACK_QUEEN);
 
   //knight moves
-  for(auto &dir : knightMoves) {
+  for(auto &dir : knightDirections) {
     if(dir == 0) break;
     attackArray[DELTA_OFFSET + dir] |= ATTACK_KNIGHT;
   }
 
   //king moves
-  for(auto &dir : kingMoves) {
+  for(auto &dir : kingDirections) {
     if(dir == 0) break;
     attackArray[DELTA_OFFSET + dir] |= ATTACK_KING;
   }
@@ -37,7 +92,7 @@ void MoveData::preComputeAttackArray() {
   attackArray[DELTA_OFFSET + SW] |= ATTACK_BLACK_PAWN;
 }
 
-void MoveData::preComputeAttackSlidingPiece(const std::array<int, 64>& slidingPieceArray, int type) {
+void MoveData::preComputeAttackSlidingPiece(std::array<int, 64> slidingPieceArray, int type) {
   for(auto &dir : slidingPieceArray) {
     if(dir == 0) break;
     //a board has 8 squares on both sides, so generate delta for all of them
@@ -49,7 +104,7 @@ void MoveData::preComputeAttackSlidingPiece(const std::array<int, 64>& slidingPi
 
 void MoveData::preComputeDirectionArray() {
   //direction array rook and queen
-  for(int dir : rookMoves) {
+  for(int dir : rookDirections) {
     if(dir == 0) {
       break;
     }
@@ -59,7 +114,7 @@ void MoveData::preComputeDirectionArray() {
   }
 
   //direction array bishop and queen
-  for(int dir : bishopMoves) {
+  for(int dir : bishopDirections) {
     if(dir == 0) {
       break;
     }

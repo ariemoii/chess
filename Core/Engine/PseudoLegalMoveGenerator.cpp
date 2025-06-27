@@ -27,9 +27,9 @@ void PseudoLegalMoveGenerator::generatePseudolegalMoves(Board* board, std::vecto
 void PseudoLegalMoveGenerator::generateSlidingPieceMoves(int startSquare, Piece::PieceType type, Board* board, std::vector<Move>& moveVector) {
   int piece = board->theBoard[startSquare];
   const std::array<int, 64>& slidingArray = 
-  (type == Piece::BISHOP) ? moveData.bishopMoves :
-  (type == Piece::ROOK) ? moveData.rookMoves :
-  moveData.queenMoves;
+  (type == Piece::BISHOP) ? moveData.bishopDirections :
+  (type == Piece::ROOK) ? moveData.rookDirections :
+  moveData.queenDirections;
   //get the correct piece movement table
 
   for(const auto &i : slidingArray) {
@@ -73,7 +73,7 @@ bool PseudoLegalMoveGenerator::isLegalCapture(Move move, Board* board) {
 }
 
 void PseudoLegalMoveGenerator::generateKnightMoves(int startSquare, Board* board, std::vector<Move>& moveVector) {
-  for(const auto &i : moveData.knightMoves) {
+  for(const auto &i : moveData.knightDirections) {
     if(i == 0) {
       break;
     }
@@ -97,7 +97,7 @@ void PseudoLegalMoveGenerator::generateKnightMoves(int startSquare, Board* board
 }
 
 void PseudoLegalMoveGenerator::generateKingMoves(int startSquare, Board* board, std::vector<Move>& moveVector) {
-  for(auto &i : moveData.kingMoves) {
+  for(auto &i : moveData.kingDirections) {
     if(i == 0) {
       break;
     }

@@ -1,5 +1,6 @@
 #include "PlayerVPlayer.h"
 #include <unordered_set>
+#include <bitset>
 
 
 void PlayerVPlayer::runChess() {
@@ -13,6 +14,7 @@ void PlayerVPlayer::runChess() {
   MoveMaker moveMaker;
   sf::Event event;
   MoveGenerator moveGenerator;
+  MoveData moveData;
 
   //main loop for human v human game
   while(windowHandler.window.isOpen()) {
@@ -31,7 +33,7 @@ void PlayerVPlayer::runChess() {
           std::cout << " = " << MoveData::intToSquare(move.fromSquare) << "\n";
           std::vector<Move> moveList;
           moveGenerator.generateLegalMoves(&board, moveList);
-          bool legal = false;
+          bool legal = true;
           for(int j = 0; j < moveList.size(); j++) {
             Move i = moveList[j];
             if(i == move) {
@@ -41,6 +43,11 @@ void PlayerVPlayer::runChess() {
               move = i;
               Piece::Team ourTeam = board.sideToMove;
               moveMaker.makeMove(move, &board);
+              int toSq0x88 = move.toSquare;
+              int toSq64 = (toSq0x88 & 7) + ((toSq0x88 >> 4) * 8);
+              std::cout << "bitboard if a rook was on that sq ( = " << toSq64 << " ): \n";
+              std::bitset<64> x(moveData.rookMoves[toSq64]);
+              std::cout << x << "\n";
               if(moveGenerator.isCheckMate(&board)) {
                 if(board.sideToMove == Piece::WHITE) {
                   std::cout << "Checkmate! Black wins!\n";

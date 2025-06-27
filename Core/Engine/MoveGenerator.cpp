@@ -90,20 +90,20 @@ void MoveGenerator::generateKingDangerSquares(Piece::Team ourTeam, Board* board,
 
     //knight attacks
     if(Piece::isType(piece, Piece::KNIGHT)) {
-      for(const int &dir : moveData.knightMoves) {
+      for(const int &dir : moveData.knightDirections) {
         if(dir == 0) break;
         if((i+dir) & 0x88) continue;
         kingDangerSquares.insert(i+dir);
       }
     } else if(Piece::isType(piece, Piece::ROOK)) {
       //rook attacks
-      kingDangerSquaresSlidingPieces(moveData.rookMoves, kingDangerSquares, board, i, ourTeam);
+      kingDangerSquaresSlidingPieces(moveData.rookDirections, kingDangerSquares, board, i, ourTeam);
     } else if(Piece::isType(piece, Piece::BISHOP)) {
-      kingDangerSquaresSlidingPieces(moveData.bishopMoves, kingDangerSquares, board, i, ourTeam);
+      kingDangerSquaresSlidingPieces(moveData.bishopDirections, kingDangerSquares, board, i, ourTeam);
     } else if(Piece::isType(piece, Piece::QUEEN)) {
-      kingDangerSquaresSlidingPieces(moveData.queenMoves, kingDangerSquares, board, i, ourTeam);
+      kingDangerSquaresSlidingPieces(moveData.queenDirections, kingDangerSquares, board, i, ourTeam);
     } else if(Piece::isType(piece, Piece::KING)) {
-      for(const int &dir : moveData.kingMoves) {
+      for(const int &dir : moveData.kingDirections) {
         if(dir == 0) break;
         if((i+dir) & 0x88) continue;
         kingDangerSquares.insert(i+dir);
