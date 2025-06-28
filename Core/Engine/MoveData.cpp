@@ -51,6 +51,76 @@ std::vector<U64> MoveData::preComputeBlockerBitboards(U64 movementMask) {
   return blockerBitboards;
 }
 
+//needs testing
+U64 MoveData::createRookLegalMoveBitboard(int square, U64 blockerMask) {
+  U64 pseudoLegalMoves = 0;
+  int north=8, south=-8;
+  
+  //north
+  for(int i = 0; i < squaresTillEdge[square][0]; i++) {
+    int result = 1ULL << (square + north*i);
+    if(!(result & blockerMask)) {
+      //there is no blocker
+      pseudoLegalMoves |= result;
+    } else {
+      //there is a blocker
+      pseudoLegalMoves |= result;
+      break;
+    }
+  }
+
+  //east
+  for(int i = 0; i < squaresTillEdge[square][1]; i++) {
+    int result = 1ULL << (square + E*i);
+    if(!(result & blockerMask)) {
+      //there is no blocker
+      pseudoLegalMoves |= result;
+    } else {
+      //there is a blocker
+      pseudoLegalMoves |= result;
+      break;
+    }
+  }
+
+  //south
+  for(int i = 0; i < squaresTillEdge[square][2]; i++) {
+    int result = 1ULL << (square + south*i);
+    if(!(result & blockerMask)) {
+      //there is no blocker
+      pseudoLegalMoves |= result;
+    } else {
+      //there is a blocker
+      pseudoLegalMoves |= result;
+      break;
+    }
+  }
+
+  //west
+  for(int i = 0; i < squaresTillEdge[square][3]; i++) {
+    int result = 1ULL << (square + W*i);
+    if(!(result & blockerMask)) {
+      //there is no blocker
+      pseudoLegalMoves |= result;
+    } else {
+      //there is a blocker
+      pseudoLegalMoves |= result;
+      break;
+    }
+  }
+  return pseudoLegalMoves;
+}
+
+
+void MoveData::fillRookLookupTable() {
+  for(int i = 0; i < 64; i++) {
+    U64 movementMask = rookMoves[i];
+    std::vector<U64> blockerBitBoards = preComputeBlockerBitboards(movementMask);
+    for(U64 blockerBitboard : blockerBitBoards) {
+      
+    }
+  }
+}
+
 void MoveData::preComputeMoveBitboards() {
   //rook
   for(int i = 0; i < 64; i++) {
@@ -71,7 +141,6 @@ void MoveData::preComputeMoveBitboards() {
       rookMoves[i] |= 1ULL << (i + -1*j);
     }
   }
-  
 
 }
 

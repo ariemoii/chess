@@ -2,8 +2,16 @@
 #include "model/Piece.h"
 #include "model/Board.h"
 #include <array>
+#include <vector>
+#include <map>
+
+struct dictKey {
+  int startSquare;
+  U64 blockerBitboard;
+};
 
 class MoveData {
+
   public:
     enum Direction { N=16, E=1, S=-16, W=-1, NE=17, SE=-15, SW=-17, NW=15 };
 
@@ -32,6 +40,10 @@ class MoveData {
     static std::string intToSquare(int square);
     static int squareToInt(std::string square);
 
+    //normally using a vector is relatively slow and we avoid it, but this is 
+    //precomputed, so it is fine
+    std::vector<U64> preComputeBlockerBitboards(U64 movementMask);
+
   public:
 
     //store the direction squares a piece can move to
@@ -54,6 +66,9 @@ class MoveData {
     std::array<U64, 64> kingMoves{};
     std::array<U64, 64> knightMoves{};
 
+    std::map<dictKey, U64> rookLookupTable;
+
+
   private:
     //attack array from 
     //https://web.archive.org/web/20071027053053/http://www.brucemo.com/compchess/programming/0x88.htm,
@@ -69,4 +84,7 @@ class MoveData {
     void preComputeDirectionArray();
     void preComputeSquaresTillEdge();
     void preComputeMoveBitboards();
+    void fillRookLookupTable();
+    U64 createRookLegalMoveBitboard(int square, U64 blockerMask);
+    
 };
