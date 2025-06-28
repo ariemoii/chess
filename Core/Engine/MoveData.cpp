@@ -29,6 +29,28 @@ void MoveData::preComputeSquaresTillEdge() {
   }
 }
 
+//function taken from https://www.youtube.com/watch?v=_vqlIPDR2TU&t=1737s, 31:51.
+std::vector<U64> MoveData::preComputeBlockerBitboards(U64 movementMask) {
+  std::vector<U64> moveIndices;
+  for(U64 i = 0; i < 64; i++) {
+    if((movementMask >> i) & 1) {
+      //there is a 1 in the mask here
+      moveIndices.push_back(i);
+    }
+  }
+
+  int numPatterns = 1 << moveIndices.size();
+  std::vector<U64> blockerBitboards(numPatterns);
+  for(int patternIndex = 0; patternIndex < numPatterns; patternIndex++) {
+    for(int bitIndex = 0; bitIndex < moveIndices.size(); bitIndex++) {
+      U64 bit = (patternIndex >> bitIndex) & 1;
+      blockerBitboards[patternIndex] |= bit << moveIndices[bitIndex];
+    }
+  }
+
+  return blockerBitboards;
+}
+
 void MoveData::preComputeMoveBitboards() {
   //rook
   for(int i = 0; i < 64; i++) {
@@ -49,6 +71,8 @@ void MoveData::preComputeMoveBitboards() {
       rookMoves[i] |= 1ULL << (i + -1*j);
     }
   }
+  
+
 }
 
 void MoveData::preComputeMoveData() {

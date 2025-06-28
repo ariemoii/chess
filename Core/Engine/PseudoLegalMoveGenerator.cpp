@@ -145,7 +145,8 @@ void PseudoLegalMoveGenerator::generatePawnMoves(int startSquare, Board* board, 
   Piece::Team sideToMove = board->sideToMove;
   int startRank = (sideToMove == Piece::WHITE) ? 1 : 6;
   int promotionRank = (sideToMove == Piece::WHITE) ? 7 : 0;
-  int dirOffset = (sideToMove == Piece::WHITE) ? MoveData::N : MoveData::S;
+  //north or south depending on sidetomove
+  int dirOffset = (sideToMove == Piece::WHITE) ? 16 : -16;
   int currRank = startSquare >> 4;
   
 

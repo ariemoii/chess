@@ -48,11 +48,11 @@ class MoveData {
     std::array<int, 265> directionVector;
 
     //store for every square a bitboard of where a piece on that square can move to
-    std::array<U64, 64> bishopMoves;
-    std::array<U64, 64> rookMoves;
-    std::array<U64, 64> queenMoves;
-    std::array<U64, 64> kingMoves;
-    std::array<U64, 64> knightMoves;
+    std::array<U64, 64> bishopMoves{};
+    std::array<U64, 64> rookMoves{};
+    std::array<U64, 64> queenMoves{};
+    std::array<U64, 64> kingMoves{};
+    std::array<U64, 64> knightMoves{};
 
   private:
     //attack array from 
