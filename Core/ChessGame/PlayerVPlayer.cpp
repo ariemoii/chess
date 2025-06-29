@@ -42,6 +42,14 @@ void PlayerVPlayer::runChess() {
               move = i;
               Piece::Team ourTeam = board.sideToMove;
               moveMaker.makeMove(move, &board);
+
+              int toSq0x88 = move.toSquare;
+              int toSq64 = (toSq0x88 & 7) + ((toSq0x88 >> 4) * 8);
+              std::vector<U64> blockerBitboard = moveData.preComputeBlockerBitboards(moveData.rookMoves[toSq64]);
+              std::cout << "blockerBitboard(13) = " << "\n";
+              moveData.printBitboard(blockerBitboard[13]);
+              std::cout << "rooklegalmoves bitboard:\n";
+              moveData.printBitboard(moveData.createRookLegalMoveBitboard(toSq64, blockerBitboard[13]));
               if(moveGenerator.isCheckMate(&board)) {
                 if(board.sideToMove == Piece::WHITE) {
                   std::cout << "Checkmate! Black wins!\n";

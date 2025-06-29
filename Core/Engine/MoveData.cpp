@@ -57,8 +57,8 @@ U64 MoveData::createRookLegalMoveBitboard(int square, U64 blockerMask) {
   int north=8, south=-8;
   
   //north
-  for(int i = 0; i < squaresTillEdge[square][0]; i++) {
-    int result = 1ULL << (square + north*i);
+  for(int i = 1; i <= squaresTillEdge[square][0]; i++) {
+    U64 result = 1ULL << (square + north*i);
     if(!(result & blockerMask)) {
       //there is no blocker
       pseudoLegalMoves |= result;
@@ -70,8 +70,8 @@ U64 MoveData::createRookLegalMoveBitboard(int square, U64 blockerMask) {
   }
 
   //east
-  for(int i = 0; i < squaresTillEdge[square][1]; i++) {
-    int result = 1ULL << (square + E*i);
+  for(int i = 1; i <= squaresTillEdge[square][1]; i++) {
+    U64 result = 1ULL << (square + E*i);
     if(!(result & blockerMask)) {
       //there is no blocker
       pseudoLegalMoves |= result;
@@ -83,8 +83,8 @@ U64 MoveData::createRookLegalMoveBitboard(int square, U64 blockerMask) {
   }
 
   //south
-  for(int i = 0; i < squaresTillEdge[square][2]; i++) {
-    int result = 1ULL << (square + south*i);
+  for(int i = 1; i <= squaresTillEdge[square][2]; i++) {
+    U64 result = 1ULL << (square + south*i);
     if(!(result & blockerMask)) {
       //there is no blocker
       pseudoLegalMoves |= result;
@@ -96,8 +96,8 @@ U64 MoveData::createRookLegalMoveBitboard(int square, U64 blockerMask) {
   }
 
   //west
-  for(int i = 0; i < squaresTillEdge[square][3]; i++) {
-    int result = 1ULL << (square + W*i);
+  for(int i = 1; i <= squaresTillEdge[square][3]; i++) {
+    U64 result = 1ULL << (square + W*i);
     if(!(result & blockerMask)) {
       //there is no blocker
       pseudoLegalMoves |= result;
@@ -110,6 +110,17 @@ U64 MoveData::createRookLegalMoveBitboard(int square, U64 blockerMask) {
   return pseudoLegalMoves;
 }
 
+// Print bitboard in 8x8 chessboard layout
+void MoveData::printBitboard(U64 bb) {
+  for (int rank = 7; rank >= 0; rank--) {
+      for (int file = 0; file < 8; file++) {
+          int square = rank * 8 + file;
+          std::cout << ((bb >> square) & 1ULL) << " ";
+      }
+      std::cout << "\n";
+  }
+  std::cout << "Bitboard: 0x" << std::hex << bb << std::dec << "\n\n";
+}
 
 void MoveData::fillRookLookupTable() {
   for(int i = 0; i < 64; i++) {

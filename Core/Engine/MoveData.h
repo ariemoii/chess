@@ -43,6 +43,8 @@ class MoveData {
     //normally using a vector is relatively slow and we avoid it, but this is 
     //precomputed, so it is fine
     std::vector<U64> preComputeBlockerBitboards(U64 movementMask);
+    void printBitboard(U64 bitboard);
+    U64 createRookLegalMoveBitboard(int square, U64 blockerMask);
 
   public:
 
@@ -85,6 +87,6 @@ class MoveData {
     void preComputeSquaresTillEdge();
     void preComputeMoveBitboards();
     void fillRookLookupTable();
-    U64 createRookLegalMoveBitboard(int square, U64 blockerMask);
+    
     
 };
