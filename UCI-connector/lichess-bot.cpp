@@ -111,7 +111,7 @@ void processPositionCommand(std::string message, Board* board) {
 
 
 std::string processGoCommand(std::string message, Board* board) {
-  std::string move;
+  std::string move = "";
   Move theMove = bestMove(board);
   move+= MoveData::intToSquare(theMove.fromSquare);
   move+= MoveData::intToSquare(theMove.toSquare);

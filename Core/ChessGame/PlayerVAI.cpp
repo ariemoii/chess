@@ -28,7 +28,9 @@ void PlayerVAI::runChess() {
 
       if(board.sideToMove != board.getHumanTeam()) {
         //time for the bot to move!
+        std::cout << "finding best move" << std::endl;
         Move move = bestMove(&board);
+        std::cout << "best move = " << (MoveData::intToSquare(move.fromSquare)) << (MoveData::intToSquare(move.toSquare)) << '\n';
         moveMaker.makeMove(move, &board);
         renderAll(&windowHandler, &board);
         if(moveGenerator.isCheckMate(&board)) {
