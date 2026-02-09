@@ -1,5 +1,5 @@
 ./Setup-Linux.sh
 cd ../Core
-make config=debug
+make config=release
 cd ../Chess-App
-make config=debug
+make config=release

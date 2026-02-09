@@ -1,2 +1,2 @@
-cd ../Binaries/linux-x86_64/Debug/Chess-App
+cd ../Binaries/linux-x86_64/Release/Chess-App
 ./Chess-App

@@ -1,2 +1,2 @@
-cd ../Binaries/Debug
+cd ../Binaries/Release
 ./Tester "$@"
