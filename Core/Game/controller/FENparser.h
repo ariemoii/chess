@@ -1,8 +1,8 @@
 #pragma once
+
 #include "model/Piece.h"
 #include "model/Board.h"
-#include "model/GameState.h"
-#include "MoveData.h"
+
 #include <vector>
 #include <string>
 

@@ -1,5 +1,14 @@
 #include "PseudoLegalMoveGenerator.h"
 
+#include "model/GameState.h"
+#include "model/Board.h"
+#include "model/Move.h"
+#include "model/Piece.h"
+#include "model/GameState.h"
+
+#include <vector>
+#include <array>
+
 PseudoLegalMoveGenerator::PseudoLegalMoveGenerator() :
 moveData(MoveData())
 { 

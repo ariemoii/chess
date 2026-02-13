@@ -1,5 +1,15 @@
 #include "MoveGenerator.h"
 
+#include "PseudoLegalMoveGenerator.h"
+#include "MoveData.h"
+#include "controller/MoveMaker.h"
+#include "model/Move.h"
+#include "model/Piece.h"
+#include "model/Board.h"
+
+#include <unordered_set>
+#include <vector>
+
 MoveGenerator::MoveGenerator() :
 pseudoLegalMoveGenerator(PseudoLegalMoveGenerator()),
 moveData(MoveData()),

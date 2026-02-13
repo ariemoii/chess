@@ -1,4 +1,11 @@
 #include "MoveMaker.h"
+
+#include "model/GameState.h"
+#include "model/Piece.h"
+#include "model/Board.h"
+#include "model/Move.h"
+
+
 #include <iostream>
 
 MoveMaker::MoveMaker() 

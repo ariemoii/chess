@@ -1,6 +1,12 @@
 #include "MoveData.h"
+
+#include "model/Piece.h"
+#include "model/Board.h"
+
 #include <iostream>
 #include <bitset>
+#include <array>
+#include <string>
 
 #define DELTA_OFFSET 128
 

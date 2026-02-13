@@ -2,8 +2,11 @@
 
 #include "PseudoLegalMoveGenerator.h"
 #include "controller/MoveMaker.h"
+#include "MoveData.h"
 #include "model/Board.h"
+
 #include <vector>
+#include <array>
 #include <unordered_set>
 
 

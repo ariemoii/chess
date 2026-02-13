@@ -1,6 +1,8 @@
 #pragma once
 #include "model/Piece.h"
 #include "model/Board.h"
+
+#include <string>
 #include <array>
 
 class MoveData {

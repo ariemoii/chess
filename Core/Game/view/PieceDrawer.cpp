@@ -1,10 +1,12 @@
 #include "PieceDrawer.h"
 
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
+//#include <SFML/Graphics.hpp>
+//#include <SFML/Window.hpp>
 
 #include <iostream>
 #include <filesystem>
+
+#include "model/Piece.h"
 
 #define PATH_TO_LICHESS_PIECES "../../../../Assets/Pieces/pieces-basic-png/"
 #define PATH_TO_PIECES(piece) PATH_TO_LICHESS_PIECES#piece
@@ -75,11 +77,11 @@ sf::Texture& PieceDrawer::whatTexture(Piece::PieceType pieceType, Piece::Team te
         case Piece::BISHOP:
           return blackBishop;
         default:
-          perror("Piece type doesnt exist");
+          std::cerr << "Piece type doesnt exis\n";
       }
       break;
     default:
-      perror("Team doesnt exist");
+      std::cerr << "Team doesnt exist\n";
   }
 }
 

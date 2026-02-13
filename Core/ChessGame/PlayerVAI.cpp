@@ -1,6 +1,21 @@
 #include "PlayerVAI.h"
+
 #include "AI/Search.h"
 #include <unistd.h>  
+
+#include "controller/FENparser.h"
+#include "view/WindowHandler.h"
+#include "model/Board.h"
+#include "controller/MoveMaker.h"
+#include "MoveGenerator.h"
+#include "model/Move.h"
+#include "MoveData.h"
+
+#include <string>
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <iostream>
+#include <vector>
 
 PlayerVAI::PlayerVAI()
 {

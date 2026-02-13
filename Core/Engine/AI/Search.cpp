@@ -1,4 +1,6 @@
 #include "AI/Search.h"
+
+#include "model/Move.h"
 #include "model/Piece.h"
 #include "MoveGenerator.h"
 #include "controller/MoveMaker.h"

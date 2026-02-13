@@ -1,7 +1,7 @@
 #pragma once
 #include "model/Piece.h"
-#include "model/GameState.h"
 #include "model/Move.h"
+
 #include <iostream>
 #include <array>
 

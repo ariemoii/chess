@@ -1,5 +1,12 @@
 #include "Board.h"
+
 #include <bitset>
+#include <iostream>
+#include <string>
+
+#include "model/Piece.h"
+
+
 
 Board::Board() { 
   for(int i = 0; i < 8; i++) {

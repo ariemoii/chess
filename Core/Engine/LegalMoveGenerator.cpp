@@ -1,5 +1,14 @@
 #include "LegalMoveGenerator.h"
 
+#include "model/GameState.h"
+#include "model/Move.h"
+#include "model/Piece.h"
+#include "model/Board.h"
+#include "MoveData.h"
+
+#include <vector>
+#include <array>
+
 LegalMoveGenerator::LegalMoveGenerator() :
 moveData(MoveData())
 { 

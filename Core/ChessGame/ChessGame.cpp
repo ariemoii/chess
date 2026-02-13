@@ -1,5 +1,9 @@
 #include "ChessGame.h"
 
+#include "view/WindowHandler.h"
+#include "model/Board.h"
+
+
 ChessGame::ChessGame(){};
 
 /**

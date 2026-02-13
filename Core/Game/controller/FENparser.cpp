@@ -1,6 +1,11 @@
 #include "FENparser.h"
+
 #include <iostream>
 #include <sstream>
+
+#include "MoveData.h"
+#include "model/Piece.h"
+#include "model/GameState.h"
 
 
 FENparser::FENparser(){};

@@ -2,11 +2,10 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+
 #include "model/Piece.h"
 
 class PieceDrawer {
-
-  
 
   private:
     sf::RenderWindow* window;

@@ -4,7 +4,9 @@
 #include "model/Piece.h"
 #include "model/Board.h"
 #include "MoveData.h"
+
 #include <vector>
+#include <array>
 
 class LegalMoveGenerator {
   public:

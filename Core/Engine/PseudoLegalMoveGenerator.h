@@ -4,6 +4,7 @@
 #include "model/Piece.h"
 #include "model/Board.h"
 #include "MoveData.h"
+
 #include <vector>
 
 class PseudoLegalMoveGenerator {

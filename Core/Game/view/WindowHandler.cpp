@@ -2,6 +2,13 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include <iostream>
+
+
+#include "view/PieceDrawer.h"
+#include "model/Board.h"
+#include "model/Piece.h"
+#include "model/Move.h"
 
 //constructor
 WindowHandler::WindowHandler(int screenHeight, int screenWidth) :

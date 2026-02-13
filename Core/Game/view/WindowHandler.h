@@ -1,10 +1,11 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
+//#include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
 #include "model/Board.h"
 #include "view/PieceDrawer.h"
+#include "model/Piece.h"
 #include "model/Move.h"
 
 /**

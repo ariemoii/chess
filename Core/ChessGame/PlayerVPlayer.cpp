@@ -1,5 +1,19 @@
 #include "PlayerVPlayer.h"
+
+#include "controller/FENparser.h"
+#include "view/WindowHandler.h"
+#include "model/Board.h"
+#include "controller/MoveMaker.h"
+#include "MoveGenerator.h"
+#include "model/Move.h"
+#include "MoveData.h"
+
+#include <string>
 #include <unordered_set>
+#include <vector>
+#include <iostream>
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp> //not sure fix later
 
 
 void PlayerVPlayer::runChess() {
