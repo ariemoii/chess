@@ -1,6 +1,5 @@
 #include "PlayerVPlayer.h"
 
-#include "controller/FENparser.h"
 #include "view/WindowHandler.h"
 #include "model/Board.h"
 #include "controller/MoveMaker.h"
@@ -17,16 +16,8 @@
 
 
 void PlayerVPlayer::runChess() {
-  FENparser parser;
-  std::string fen = parser.requestFEN();
-  Board board;
-  board.askTeam();
-  parser.parseFen(fen, &board);
-  board.printBoard();
-  WindowHandler windowHandler(SCREEN_WIDTH, SCREEN_HEIGHT);
   MoveMaker moveMaker;
   sf::Event event;
-  MoveGenerator moveGenerator;
 
   //main loop for human v human game
   while(windowHandler.window.isOpen()) {
@@ -63,12 +54,7 @@ void PlayerVPlayer::runChess() {
               putchar('\n');
               //board.switchHumanTeam();
               if(moveGenerator.isCheckMate(&board)) {
-                if(board.sideToMove == Piece::WHITE) {
-                  std::cout << "Checkmate! Black wins!\n";
-                } else {
-                  std::cout << "Checkmate! White wins!\n";
-                }
-                windowHandler.window.close();
+                printCheckMate(board);
               }
               break;
             }

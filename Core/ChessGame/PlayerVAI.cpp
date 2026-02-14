@@ -1,9 +1,7 @@
 #include "PlayerVAI.h"
 
 #include "AI/Search.h"
-#include <unistd.h>  
 
-#include "controller/FENparser.h"
 #include "view/WindowHandler.h"
 #include "model/Board.h"
 #include "controller/MoveMaker.h"
@@ -23,15 +21,8 @@ PlayerVAI::PlayerVAI()
 }
 
 void PlayerVAI::runChess() {
-  FENparser parser;
-  std::string fen = parser.requestFEN();
-  Board board;
-  board.askTeam();
-  parser.parseFen(fen, &board);
-  WindowHandler windowHandler(SCREEN_WIDTH, SCREEN_HEIGHT);
   MoveMaker moveMaker;
   sf::Event event;
-  MoveGenerator moveGenerator;
 
   //main loop for human v human game
   while(windowHandler.window.isOpen()) {
@@ -43,20 +34,7 @@ void PlayerVAI::runChess() {
 
       if(board.sideToMove != board.getHumanTeam()) {
         //time for the bot to move!
-        std::cout << "finding best move" << std::endl;
-        Move move = bestMove(&board);
-        std::cout << "best move = " << (MoveData::intToSquare(move.fromSquare)) << (MoveData::intToSquare(move.toSquare)) << '\n';
-        moveMaker.makeMove(move, &board);
-        renderAll(&windowHandler, &board);
-        if(moveGenerator.isCheckMate(&board)) {
-          if(board.sideToMove == Piece::WHITE) {
-            std::cout << "Checkmate! Black wins!\n";
-          } else {
-            std::cout << "Checkmate! White wins!\n";
-          }
-          sleep(5);
-          windowHandler.window.close();
-        }
+        moveBot(moveMaker);
       }
 
       if(event.type == sf::Event::MouseButtonPressed) {
@@ -81,12 +59,7 @@ void PlayerVAI::runChess() {
               Piece::Team ourTeam = board.sideToMove;
               moveMaker.makeMove(move, &board);
               if(moveGenerator.isCheckMate(&board)) {
-                if(board.sideToMove == Piece::WHITE) {
-                  std::cout << "Checkmate! Black wins!\n";
-                } else {
-                  std::cout << "Checkmate! White wins!\n";
-                }
-                windowHandler.window.close();
+                printCheckMate(board);
               }
               break;
             }
@@ -102,5 +75,16 @@ void PlayerVAI::runChess() {
 
       renderAll(&windowHandler, &board);
     }
+  }
+}
+
+void PlayerVAI::moveBot(MoveMaker &moveMaker) {
+  std::cout << "finding best move" << std::endl;
+  Move move = bestMove(&board);
+  std::cout << "best move = " << (MoveData::intToSquare(move.fromSquare)) << (MoveData::intToSquare(move.toSquare)) << '\n';
+  moveMaker.makeMove(move, &board);
+  renderAll(&windowHandler, &board);
+  if(moveGenerator.isCheckMate(&board)) {
+    printCheckMate(board);
   }
 }
