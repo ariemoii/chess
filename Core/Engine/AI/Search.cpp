@@ -87,7 +87,7 @@ Move bestMove(Board* board) {
   int bestEval = -1999999999;
   for(Move move : moves) {
     moveMaker.makeMove(move, board);
-    int eval = -search(4, board, -1999999999, 1999999999);
+    int eval = -search(2, board, -1999999999, 1999999999);
     moveMaker.unmakeLastMove(board);
     if(eval >= bestEval) {
       bestEval = eval;
